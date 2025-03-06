@@ -1,0 +1,25 @@
+﻿<Application x:Class="QuanAnNhat.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:QuanAnNhat"
+             xmlns:views="clr-namespace:QuanAnNhat.Views"
+             xmlns:viewmodels="clr-namespace:QuanAnNhat.ViewModels"
+             StartupUri="Views/MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Theme/Window/ScrollbarTheme.xaml"/>
+                <ResourceDictionary Source="/Theme/Sidebar/SidebarTheme.xaml"/>
+                <ResourceDictionary Source="/Theme/OrderPage/LabelTheme.xaml"/>
+                <ResourceDictionary Source="/Theme/OrderPage/CategoryTheme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
+                <views:HomeView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:OrderViewModel}">
+                <views:OrderView/>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
