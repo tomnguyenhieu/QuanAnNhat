@@ -1,0 +1,266 @@
+﻿<UserControl x:Class="QuanAnNhat.Views.OrderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:QuanAnNhat.Views"
+             xmlns:viewmodels="clr-namespace:QuanAnNhat.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="900" d:DesignWidth="1300">
+    <UserControl.Resources>
+        <viewmodels:OrderViewModel x:Key="OrderVM"/>
+    </UserControl.Resources>
+    <Grid DataContext="{StaticResource OrderVM}" ShowGridLines="True" Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="430"/>
+        </Grid.ColumnDefinitions>
+        <Grid ShowGridLines="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="90"/>
+                <RowDefinition Height="168"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid ShowGridLines="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Border Background="#D9D9D9"
+                        CornerRadius="20"
+                        Padding="20">
+                    <TextBox Background="Transparent"
+                             BorderThickness="0"
+                             FontSize="30"
+                             Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </Border>
+            </Grid>
+            <Grid Grid.Row="1" ShowGridLines="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition x:Name="GRCategory" Height="50"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="Categories" Style="{StaticResource LabelTheme}"/>
+                <ItemsControl x:Name="CategoriesItemControl" Grid.Row="1" ItemsSource="{Binding Dishlists}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <RadioButton Content="{Binding Name}"
+                                         Style="{StaticResource CategoryTheme}"
+                                         Command="{Binding DataContext.ExcuteGetMenuCommand, ElementName=CategoriesItemControl}"
+                                         CommandParameter="{Binding Name}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Grid>
+            <Grid Grid.Row="2" ShowGridLines="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="{Binding Height, ElementName=GRCategory}"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="Menu" Style="{StaticResource LabelTheme}"/>
+                <ScrollViewer Grid.Row="1">
+                    <ItemsControl x:Name="MenuItemControl" ItemsSource="{Binding Dishes}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Width="225"
+                                        Background="#BC4C33"
+                                        CornerRadius="20"
+                                        Margin="0 0 24 30">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="10"
+                                                          ShadowDepth="1"
+                                                          Direction="270"
+                                                          Color="Black"
+                                                          Opacity="0.4"/>
+                                    </Border.Effect>
+                                    <StackPanel Margin="10">
+                                        <Border Height="115"
+                                                CornerRadius="20"
+                                                Background="White">
+                                            <Border.Effect>
+                                                <DropShadowEffect BlurRadius="10"
+                                              ShadowDepth="1"
+                                              Direction="270"
+                                              Color="Black"
+                                              Opacity="0.4"/>
+                                            </Border.Effect>
+                                        </Border>
+                                        <StackPanel Margin="12 8 12 0">
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontFamily="Montserrat Alternates"
+                                                       Foreground="#F5EFDF"
+                                                       FontSize="20"
+                                                       FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding Description}"
+                                                       FontFamily="Montserrat Alternates"
+                                                       Foreground="#F5EFDF"
+                                                       FontSize="11"/>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Price}"
+                                                           FontFamily="Montserrat Alternates"
+                                                           Foreground="#42150D"
+                                                           FontSize="34" 
+                                                           FontWeight="SemiBold" 
+                                                           HorizontalAlignment="Left"/>
+                                                <Button Grid.Column="1" 
+                                                        Content="Order" 
+                                                        Width="80" 
+                                                        Command="{Binding DataContext.ExcuteAddToCartCommand, ElementName=MenuItemControl}"
+                                                        CommandParameter="{Binding Id}"/>
+                                            </Grid>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+        <Grid Grid.Column="1" ShowGridLines="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="420"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid ShowGridLines="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition x:Name="GRCustomerInfo" Height="50"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="Customer information" Style="{StaticResource LabelTheme}"/>
+                <Grid Grid.Row="1" ShowGridLines="True">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Hieu"
+                               FontSize="50"/>
+                    <ComboBox Grid.Row="1" 
+                              ItemsSource="{Binding Tables}"
+                              SelectedItem="{Binding SelectedTable, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Id}"
+                                           FontSize="20"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1" ShowGridLines="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="Cart/order details" Style="{StaticResource LabelTheme}"/>
+                <ScrollViewer Grid.Row="1">
+                    <ItemsControl x:Name="CartItemControl" ItemsSource="{Binding Cart}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="#D9D9D9" 
+                                        Height="110"
+                                        CornerRadius="20"
+                                        Margin="0 0 0 20">
+                                    <Grid ShowGridLines="True">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="124"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Background="White"
+                                                Margin="16"
+                                                CornerRadius="14"/>
+                                        <Grid Grid.Column="1" ShowGridLines="True" Margin="10">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontSize="24"
+                                                       VerticalAlignment="Center"/>
+                                            <Grid Grid.Row="1" ShowGridLines="True">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <Border Background="White"
+                                                        Margin="5"
+                                                        CornerRadius="18">
+                                                    <Grid ShowGridLines="True">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <Button Content="-" 
+                                                                Background="Transparent"
+                                                                BorderThickness="0"
+                                                                Command="{Binding DataContext.ExcuteMinusCommand, ElementName=CartItemControl}"
+                                                                CommandParameter="{Binding Name}"/>
+                                                        <TextBlock Grid.Column="1" 
+                                                                   Text="{Binding Quantity}"
+                                                                   FontSize="24"
+                                                                   VerticalAlignment="Center"
+                                                                   HorizontalAlignment="Center"/>
+                                                        <Button Grid.Column="2" 
+                                                                Content="+" 
+                                                                Background="Transparent"
+                                                                BorderThickness="0"
+                                                                Command="{Binding DataContext.ExcutePlusCommand, ElementName=CartItemControl}"
+                                                                CommandParameter="{Binding Name}"/>
+                                                    </Grid>
+                                                </Border>
+                                                <TextBlock Grid.Column="1"
+                                                           Text="{Binding Price}"
+                                                           FontSize="30"
+                                                           HorizontalAlignment="Right"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+            <Grid Grid.Row="2" ShowGridLines="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="Notes" Style="{StaticResource LabelTheme}"/>
+                <Grid Grid.Row="1" ShowGridLines="True">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="140"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBox Background="#D9D9D9"
+                             FontSize="20"
+                             Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             TextWrapping="Wrap"/>
+                    <Button Grid.Row="1"
+                            Background="BlueViolet"
+                            Margin="12"
+                            Content="Pay"
+                            FontSize="40"
+                            Foreground="White"
+                            Command="{Binding ExcutePayCommand}"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>
