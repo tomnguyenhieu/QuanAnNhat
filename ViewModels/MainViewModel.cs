@@ -11,11 +11,11 @@ namespace QuanAnNhat.ViewModels
     partial class MainViewModel : ObservableObject
     {
         [ObservableProperty]
-        private ObservableObject _SelectedViewModel;
+        private object? _SelectedViewModel;
 
         public MainViewModel()
         {
-            //
+            SelectedViewModel = new HomeViewModel();
         }
 
         [RelayCommand]
@@ -28,6 +28,9 @@ namespace QuanAnNhat.ViewModels
                     break;
                 case "Order":
                     SelectedViewModel = new OrderViewModel();
+                    break;
+                case "LiveData":
+                    SelectedViewModel = new LiveDataViewModel();
                     break;
             }
         }
