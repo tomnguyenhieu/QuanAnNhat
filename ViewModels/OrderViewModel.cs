@@ -42,15 +42,7 @@ namespace QuanAnNhat.ViewModels
             }
         }
 
-        private string? _Notes;
-        public string? Notes
-        {
-            get => _Notes;
-            set
-            {
-                SetProperty(ref _Notes, value);
-            }
-        }
+        public string? Notes { get; set; }
 
         public OrderViewModel()
         {
@@ -84,7 +76,7 @@ namespace QuanAnNhat.ViewModels
         public void GetMenuByCategory(string? category)
         {
             Dishes.Clear();
-            var _dishes = DataProvider.Ins.Context.Dishes.Include(x => x.Dishlist).Where(x => x.Dishlist.Name == category).Where(x => x.DishlistId == x.Dishlist.Id).ToList();
+            var _dishes = DataProvider.Ins.Context.Dishes.Include(x => x.Dishlist).Where(x => x.Dishlist.Name == category && x.DishlistId == x.Dishlist.Id).ToList();
             foreach (var item in _dishes)
             {
                 Dishes.Add(item);
