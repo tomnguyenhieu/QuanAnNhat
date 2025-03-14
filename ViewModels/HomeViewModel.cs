@@ -1,11 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
+using QuanAnNhat.DBContext;
 using QuanAnNhat.Models;
 using QuanAnNhat.Singletons;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,29 +27,36 @@ namespace QuanAnNhat.ViewModels
             GetBestSellerDishes();
         }
 
-        public void GetMustTryDishes()
+        public async void GetMustTryDishes()
         {
-            var tmpDishes = DataProvider.Ins.Context.Dishes.Where(x => x.MustTry == 2).Where(x => x.Status == 2).ToList();
-            int count = 1;
-            foreach (var _dish in tmpDishes)
+            using (var context = new QuanannhatContext())
             {
-                count++;
-                if (count <= 5)
+                var tmpDishes =  await context.Dishes.Where(x => x.MustTry == 2).Where(x => x.Status == 2).ToListAsync();
+                int count = 1;
+                foreach (var _dish in tmpDishes)
                 {
-                    MustTryDishes.Add(_dish);
+                    count++;
+                    if (count <= 5)
+                    {
+                        MustTryDishes.Add(_dish);
+                    }
                 }
             }
         }
-        public void GetBestSellerDishes()
+
+        public async void GetBestSellerDishes()
         {
-            var tmpDishes = DataProvider.Ins.Context.Dishes.OrderByDescending(x => x.TotalSold).ToList();
-            int count = 0;
-            foreach (var _dish in tmpDishes)
+            using (var context = new QuanannhatContext())
             {
-                count++;
-                if (count <= 5)
+                var tmpDishes = await context.Dishes.OrderByDescending(x => x.TotalSold).ToListAsync();
+                int count = 0;
+                foreach (var _dish in tmpDishes)
                 {
-                    BestSellerDishes.Add(_dish);
+                    count++;
+                    if (count <= 5)
+                    {
+                        BestSellerDishes.Add(_dish);
+                    }
                 }
             }
         }
