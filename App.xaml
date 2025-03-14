@@ -20,6 +20,9 @@
             <DataTemplate DataType="{x:Type viewmodels:OrderViewModel}">
                 <views:OrderView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:LiveDataViewModel}">
+                <views:LiveDataView/>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
