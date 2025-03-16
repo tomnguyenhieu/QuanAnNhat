@@ -41,7 +41,6 @@ namespace QuanAnNhat.ViewModels
                 SetProperty(ref _SelectedTable, value);
             }
         }
-
         public string? Notes { get; set; }
 
         public OrderViewModel()
@@ -139,13 +138,13 @@ namespace QuanAnNhat.ViewModels
                 Order order = new Order()
                 {
                     Id = _orderId++,
-                    UserId = 1,
-                    Status = 2, //cho xac nhan
+                    //UserId = 1,
+                    //Status = 2, //cho xac nhan
                     DishId = dish.Id,
                     Quantity = dish.Quantity,
-                    TableId = SelectedTable?.Id,
-                    Time = dateTime,
-                    Note = Notes,
+                    //TableId = SelectedTable?.Id,
+                    //Time = dateTime,
+                    //Note = Notes,
                     TotalPrice = dish.Quantity * dish.Price
                 };
                 DataProvider.Ins.Context.Orders.Add(order);
@@ -153,8 +152,8 @@ namespace QuanAnNhat.ViewModels
             DataProvider.Ins.Context.SaveChanges();
 
             SelectedTable = null;
-            Cart.Clear();
             Notes = null;
+            Cart.Clear();
         }
 
         [RelayCommand]
