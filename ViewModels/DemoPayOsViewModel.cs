@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using Net.payOS;
 using Net.payOS.Types;
+using QuanAnNhat.Models;
 
 namespace QuanAnNhat.ViewModels
 {
@@ -42,10 +43,10 @@ namespace QuanAnNhat.ViewModels
                     PaymentAmount += item.price * item.quantity;
                 }
 
-                paymentData = new PaymentData(17, PaymentAmount, "Test Payment", itemDatas, "http://localhost/", "http://localhost/");
+                paymentData = new PaymentData(17, PaymentAmount, "Demo Thanh Toan", itemDatas, "http://localhost/", "http://localhost/");
                
                 CreatePaymentResult createPayment = await payOS.createPaymentLink(paymentData);
-
+                Console.WriteLine(createPayment);
                 ProcessStartInfo processStartInfo = new ProcessStartInfo()
                 {
                     UseShellExecute = true,
