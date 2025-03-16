@@ -48,7 +48,7 @@ public partial class User
     public virtual Information? Information { get; set; }
 
     [InverseProperty("User")]
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public virtual ICollection<OrderBill> OrderBills { get; set; } = new List<OrderBill>();
 
     [InverseProperty("User")]
     public virtual ICollection<Rate> Rates { get; set; } = new List<Rate>();

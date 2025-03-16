@@ -22,6 +22,9 @@ public partial class Employee
     [Column("salary")]
     public int? Salary { get; set; }
 
+    [Column("status")]
+    public int? Status { get; set; }
+
     [ForeignKey("InformationId")]
     [InverseProperty("Employees")]
     public virtual Information? Information { get; set; }

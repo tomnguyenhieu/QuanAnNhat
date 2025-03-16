@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace QuanAnNhat.Models;
 
 [Table("dishes")]
-public partial class Dish : ObservableObject
+public partial class Dish
 {
     [Key]
     [Column("id")]
@@ -47,13 +45,8 @@ public partial class Dish : ObservableObject
     [Column("must_try")]
     public int? MustTry { get; set; }
 
-    private int? _Quantity;
     [Column("quantity")]
-    public int? Quantity
-    {
-        get => _Quantity;
-        set => SetProperty(ref _Quantity, value);
-    }
+    public int? Quantity { get; set; }
 
     [Column("total_sold")]
     public int? TotalSold { get; set; }

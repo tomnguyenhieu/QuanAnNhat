@@ -114,9 +114,7 @@ public partial class QuanannhatContext : DbContext
 
             entity.HasOne(d => d.Dish).WithMany(p => p.Orders).HasConstraintName("FK__orders__dish_id__5629CD9C");
 
-            entity.HasOne(d => d.Table).WithMany(p => p.Orders).HasConstraintName("FK__orders__table_id__571DF1D5");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Orders).HasConstraintName("FK__orders__user_id__5812160E");
+            entity.HasOne(d => d.Orderbill).WithMany(p => p.Orders).HasConstraintName("FK__orders__orderbil__6E01572D");
         });
 
         modelBuilder.Entity<OrderBill>(entity =>
@@ -124,10 +122,15 @@ public partial class QuanannhatContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__order_bi__3213E83FD444C9B5");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Time)
+                .IsRowVersion()
+                .IsConcurrencyToken();
 
             entity.HasOne(d => d.Discount).WithMany(p => p.OrderBills).HasConstraintName("FK__order_bil__disco__5441852A");
 
-            entity.HasOne(d => d.Order).WithMany(p => p.OrderBills).HasConstraintName("FK__order_bil__order__5535A963");
+            entity.HasOne(d => d.Table).WithMany(p => p.OrderBills).HasConstraintName("FK__order_bil__table__6FE99F9F");
+
+            entity.HasOne(d => d.User).WithMany(p => p.OrderBills).HasConstraintName("FK__order_bil__user___6EF57B66");
         });
 
         modelBuilder.Entity<Rate>(entity =>

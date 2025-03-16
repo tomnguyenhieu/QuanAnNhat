@@ -13,23 +13,44 @@ public partial class OrderBill
     [Column("id")]
     public int Id { get; set; }
 
-    [Column("order_id")]
-    public int? OrderId { get; set; }
-
     [Column("discount_id")]
     public int? DiscountId { get; set; }
 
     [Column("total_price")]
     public int? TotalPrice { get; set; }
 
-    [Column("status")]
-    public int? Status { get; set; }
+    [Column("order_status")]
+    public int? OrderStatus { get; set; }
+
+    [Column("bill_status")]
+    public int? BillStatus { get; set; }
+
+    [Column("note")]
+    [StringLength(1)]
+    [Unicode(false)]
+    public string? Note { get; set; }
+
+    [Column("time")]
+    public byte[] Time { get; set; } = null!;
+
+    [Column("user_id")]
+    public int? UserId { get; set; }
+
+    [Column("table_id")]
+    public int? TableId { get; set; }
 
     [ForeignKey("DiscountId")]
     [InverseProperty("OrderBills")]
     public virtual Discount? Discount { get; set; }
 
-    [ForeignKey("OrderId")]
+    [InverseProperty("Orderbill")]
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
+    [ForeignKey("TableId")]
     [InverseProperty("OrderBills")]
-    public virtual Order? Order { get; set; }
+    public virtual Table? Table { get; set; }
+
+    [ForeignKey("UserId")]
+    [InverseProperty("OrderBills")]
+    public virtual User? User { get; set; }
 }
