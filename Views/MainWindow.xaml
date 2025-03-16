@@ -71,6 +71,14 @@
                         Content="LiveData"
                         Foreground="#FBEAD9"
                         Style="{StaticResource SidebarTheme}" />
+                    <RadioButton
+                        x:Name="DemoPayOS"
+                        HorizontalAlignment="Center"
+                        Command="{Binding ExcuteUpdateViewCommand}"
+                        CommandParameter="{Binding Content, ElementName=DemoPayOS}"
+                        Content="DemoPayOS"
+                        Foreground="#FBEAD9"
+                        Style="{StaticResource SidebarTheme}" />
                 </StackPanel>
             </Grid>
             <ContentControl Grid.Column="1" Content="{Binding SelectedViewModel}" />

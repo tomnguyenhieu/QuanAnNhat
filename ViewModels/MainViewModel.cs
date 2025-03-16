@@ -32,6 +32,9 @@ namespace QuanAnNhat.ViewModels
                 case "LiveData":
                     SelectedViewModel = new LiveDataViewModel();
                     break;
+                case "DemoPayOS":
+                    SelectedViewModel = new DemoPayOsViewModel();
+                    break;
             }
         }
     }
