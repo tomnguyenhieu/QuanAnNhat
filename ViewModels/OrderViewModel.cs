@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
+using QuanAnNhat.DBContext;
 using QuanAnNhat.Models;
 using QuanAnNhat.Singletons;
 using System;
@@ -15,6 +16,7 @@ namespace QuanAnNhat.ViewModels
 {
     partial class OrderViewModel : ObservableObject
     {
+        private int _UserId = 6;
         public ObservableCollection<Dishlist> Dishlists { get; set; }
         public ObservableCollection<Dish> Dishes { get; set; }
         public Dishlist Category { get; set; }
@@ -129,23 +131,49 @@ namespace QuanAnNhat.ViewModels
             return true;
         }
 
-        public void CreateOrders()
+        public void CreateOrderBill()
         {
             DateTime dateTime = DateTime.Now;
+            int _orderId = DataProvider.Ins.Context.OrderBills.Count() + 1;
+            int? totalPrice = 0;
+            foreach (var dish in Cart)
+            {
+                totalPrice += dish.Quantity * dish.Price;
+            }
+            OrderBill orderBill = new OrderBill()
+            {
+                Id = _orderId,
+                TotalPrice = totalPrice,
+                OrderStatus = 2,
+                BillStatus = 2,
+                Note = Notes,
+                UserId = _UserId,
+                TableId = SelectedTable?.Id
+            };
+            DataProvider.Ins.Context.OrderBills.Add(orderBill);
+            DataProvider.Ins.Context.SaveChanges();
+        }
+
+        public void CreateOrders()
+        {
             int _orderId = DataProvider.Ins.Context.Orders.Count() + 1;
+            int orderBillId = 0;
+            foreach (var orderbill in DataProvider.Ins.Context.OrderBills.ToList())
+            {
+                if (orderbill.UserId == _UserId)
+                {
+                    orderBillId = orderbill.Id;
+                }
+            }
             foreach (var dish in Cart)
             {
                 Order order = new Order()
                 {
                     Id = _orderId++,
-                    //UserId = 1,
-                    //Status = 2, //cho xac nhan
                     DishId = dish.Id,
                     Quantity = dish.Quantity,
-                    //TableId = SelectedTable?.Id,
-                    //Time = dateTime,
-                    //Note = Notes,
-                    TotalPrice = dish.Quantity * dish.Price
+                    TotalPrice = dish.Quantity * dish.Price,
+                    OrderbillId = orderBillId
                 };
                 DataProvider.Ins.Context.Orders.Add(order);
             }
@@ -200,6 +228,7 @@ namespace QuanAnNhat.ViewModels
         {
             if (OrderValidate())
             {
+                CreateOrderBill();
                 CreateOrders();
                 MessageBox.Show("Dat mon thanh cong!");
             }
