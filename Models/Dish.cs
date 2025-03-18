@@ -16,7 +16,7 @@ public partial class Dish : ObservableObject
     public int Id { get; set; }
 
     [Column("dishlist_id")]
-    public int? DishlistId { get; set; }
+    public int DishlistId { get; set; }
 
     [Column("name")]
     [StringLength(255)]
@@ -29,7 +29,7 @@ public partial class Dish : ObservableObject
     public string? Thumbnail { get; set; }
 
     [Column("price")]
-    public int? Price { get; set; }
+    public int Price { get; set; }
 
     [Column("description")]
     [StringLength(255)]
@@ -42,21 +42,21 @@ public partial class Dish : ObservableObject
     public string? Size { get; set; }
 
     [Column("status")]
-    public int? Status { get; set; }
+    public int Status { get; set; }
 
     [Column("must_try")]
-    public int? MustTry { get; set; }
+    public int MustTry { get; set; }
 
-    private int? _Quantity;
+    private int _Quantity;
     [Column("quantity")]
-    public int? Quantity
+    public int Quantity
     {
         get => _Quantity;
         set => SetProperty(ref _Quantity, value);
     }
 
     [Column("total_sold")]
-    public int? TotalSold { get; set; }
+    public int TotalSold { get; set; }
 
     [InverseProperty("Dish")]
     public virtual ICollection<Discount> Discounts { get; set; } = new List<Discount>();
