@@ -1,14 +1,19 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
+using Net.payOS;
+using Net.payOS.Types;
 using QuanAnNhat.DBContext;
 using QuanAnNhat.Models;
 using QuanAnNhat.Singletons;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -45,6 +50,10 @@ namespace QuanAnNhat.ViewModels
         }
         public string? Notes { get; set; }
 
+        private PayOS payOS;
+        private Config config;
+        private List<ItemData> itemDatas;
+        private PaymentData paymentData;
         public OrderViewModel()
         {
             Dishlists = new ObservableCollection<Dishlist>();
@@ -134,50 +143,101 @@ namespace QuanAnNhat.ViewModels
         public void CreateOrderBill()
         {
             DateTime dateTime = DateTime.Now;
-            int _orderId = DataProvider.Ins.Context.OrderBills.Count() + 1;
-            int? totalPrice = 0;
-            foreach (var dish in Cart)
+            using (var context = new QuanannhatContext())
             {
-                totalPrice += dish.Quantity * dish.Price;
+                int _orderId = context.OrderBills.Count() + 1;
+                int? totalPrice = 0;
+                foreach (var dish in Cart)
+                {
+                    totalPrice += dish.Quantity * dish.Price;
+                }
+                OrderBill orderBill = new OrderBill()
+                {
+                    Id = _orderId,
+                    TotalPrice = totalPrice,
+                    OrderStatus = 2,
+                    BillStatus = 2,
+                    Note = Notes,
+                    UserId = _UserId,
+                    TableId = SelectedTable?.Id
+                };
+                context.OrderBills.Add(orderBill);
+                context.SaveChanges();
             }
-            OrderBill orderBill = new OrderBill()
-            {
-                Id = _orderId,
-                TotalPrice = totalPrice,
-                OrderStatus = 2,
-                BillStatus = 2,
-                Note = Notes,
-                UserId = _UserId,
-                TableId = SelectedTable?.Id
-            };
-            DataProvider.Ins.Context.OrderBills.Add(orderBill);
-            DataProvider.Ins.Context.SaveChanges();
         }
 
-        public void CreateOrders()
+        public int GetOrderBillIdByUserId(int userId)
         {
-            int _orderId = DataProvider.Ins.Context.Orders.Count() + 1;
             int orderBillId = 0;
             foreach (var orderbill in DataProvider.Ins.Context.OrderBills.ToList())
             {
-                if (orderbill.UserId == _UserId)
+                if (orderbill.UserId == userId)
                 {
                     orderBillId = orderbill.Id;
                 }
             }
+            return orderBillId;
+        }
+
+        public void CreateOrders()
+        {
+            using (var context = new QuanannhatContext())
+            {
+                int _orderId = context.Orders.ToList().Count();
+                foreach (var dish in Cart)
+                {
+                    _orderId += 1;
+                    Order order = new Order()
+                    {
+                        Id = _orderId,
+                        DishId = dish.Id,
+                        Quantity = dish.Quantity,
+                        TotalPrice = dish.Quantity * dish.Price,
+                        OrderbillId = GetOrderBillIdByUserId(_UserId)
+                    };
+                    context.Orders.Add(order);
+                }
+                context.SaveChanges();
+            }
+        }
+
+        public async void HandlePayment()
+        {
+            int PaymentAmount = 0;
+            string text = File.ReadAllText(@"D:\Learning\C#\HAU\QuanAnNhat\.config.json");
+            Config? config = JsonSerializer.Deserialize<Config>(text);
+
+            payOS = new PayOS(config.ClientId, config.ApiKey, config.ChecksumKey);
+
+            itemDatas = new List<ItemData>();
             foreach (var dish in Cart)
             {
-                Order order = new Order()
+                itemDatas.Add(new ItemData(dish.Name, dish.Quantity, dish.Price));
+            };
+
+            try
+            {
+                foreach (ItemData item in itemDatas)
                 {
-                    Id = _orderId++,
-                    DishId = dish.Id,
-                    Quantity = dish.Quantity,
-                    TotalPrice = dish.Quantity * dish.Price,
-                    OrderbillId = orderBillId
-                };
-                DataProvider.Ins.Context.Orders.Add(order);
+                    PaymentAmount += item.price * item.quantity;
+                }
+                using (var context = new QuanannhatContext())
+                {
+                    paymentData = new PaymentData(GetOrderBillIdByUserId(_UserId), PaymentAmount, $"Thanh toan bill #{GetOrderBillIdByUserId(_UserId)}", itemDatas, "http://localhost/", "http://localhost/");
+
+                    CreatePaymentResult createPayment = await payOS.createPaymentLink(paymentData);
+                    ProcessStartInfo processStartInfo = new ProcessStartInfo()
+                    {
+                        UseShellExecute = true,
+                        FileName = createPayment.checkoutUrl
+                    };
+                    Process.Start(processStartInfo);
+                }
             }
-            DataProvider.Ins.Context.SaveChanges();
+            catch (Exception)
+            {
+                throw;
+            }
 
             SelectedTable = null;
             Notes = null;
@@ -230,7 +290,7 @@ namespace QuanAnNhat.ViewModels
             {
                 CreateOrderBill();
                 CreateOrders();
-                MessageBox.Show("Dat mon thanh cong!");
+                HandlePayment();
             }
         }
     }
