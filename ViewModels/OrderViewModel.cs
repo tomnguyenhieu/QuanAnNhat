@@ -223,7 +223,8 @@ namespace QuanAnNhat.ViewModels
                 }
                 using (var context = new QuanannhatContext())
                 {
-                    paymentData = new PaymentData(GetOrderBillIdByUserId(_UserId), PaymentAmount, $"Thanh toan bill #{GetOrderBillIdByUserId(_UserId)}", itemDatas, "http://localhost/", "http://localhost/");
+                    int orderCode = GetOrderBillIdByUserId(_UserId);
+                    paymentData = new PaymentData(orderCode, PaymentAmount, $"Thanh toan bill #{orderCode}", itemDatas, "http://localhost/", "http://localhost/");
 
                     CreatePaymentResult createPayment = await payOS.createPaymentLink(paymentData);
                     ProcessStartInfo processStartInfo = new ProcessStartInfo()
