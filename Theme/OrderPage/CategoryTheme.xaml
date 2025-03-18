@@ -10,7 +10,7 @@
                         <Border Width="150" Height="55"
                                 Background="#D9D9D9"
                                 CornerRadius="12"
-                                Margin="0 0 10 0">
+                                Margin="0 0 10 10">
                             <TextBlock Text="{TemplateBinding Property=Content}"
                                        FontSize="30"
                                        FontFamily="Kaushan Script"
