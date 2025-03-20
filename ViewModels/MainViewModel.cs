@@ -29,6 +29,9 @@ namespace QuanAnNhat.ViewModels
                 case "Order":
                     SelectedViewModel = new OrderViewModel();
                     break;
+                case "Order History":
+                    SelectedViewModel = new OrderHistoryViewModel();
+                    break;
                 case "LiveData":
                     SelectedViewModel = new LiveDataViewModel();
                     break;

@@ -64,6 +64,14 @@
                         Foreground="#FBEAD9"
                         Style="{StaticResource SidebarTheme}" />
                     <RadioButton
+                        x:Name="OrderHistoryBtn"
+                        HorizontalAlignment="Center"
+                        Command="{Binding ExcuteUpdateViewCommand}"
+                        CommandParameter="{Binding Content, ElementName=OrderHistoryBtn}"
+                        Content="Order History"
+                        Foreground="#FBEAD9"
+                        Style="{StaticResource SidebarTheme}" />
+                    <RadioButton
                         x:Name="LiveDataBtn"
                         HorizontalAlignment="Center"
                         Command="{Binding ExcuteUpdateViewCommand}"
