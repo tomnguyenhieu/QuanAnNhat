@@ -51,7 +51,7 @@ namespace QuanAnNhat.ViewModels
         public string? Notes { get; set; }
 
         private PayOS payOS;
-        private Config config;
+        private Config? config;
         private List<ItemData> itemDatas;
         private PaymentData paymentData;
         public OrderViewModel()
@@ -205,7 +205,7 @@ namespace QuanAnNhat.ViewModels
         {
             int PaymentAmount = 0;
             string text = File.ReadAllText(@"D:\Learning\C#\HAU\QuanAnNhat\.config.json");
-            Config? config = JsonSerializer.Deserialize<Config>(text);
+            config = JsonSerializer.Deserialize<Config>(text);
 
             payOS = new PayOS(config.ClientId, config.ApiKey, config.ChecksumKey);
 
