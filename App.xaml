@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="/Theme/Sidebar/SidebarTheme.xaml" />
                 <ResourceDictionary Source="/Theme/OrderPage/LabelTheme.xaml" />
                 <ResourceDictionary Source="/Theme/OrderPage/CategoryTheme.xaml" />
+                <ResourceDictionary Source="/Theme/OrderHistory/StatusButtonTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
@@ -20,6 +21,9 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:OrderViewModel}">
                 <views:OrderView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:OrderHistoryViewModel}">
+                <views:OrderHistoryView />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:LiveDataViewModel}">
                 <views:LiveDataView />
