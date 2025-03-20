@@ -25,19 +25,19 @@ public partial class OrderBill
     [Column("bill_status")]
     public int? BillStatus { get; set; }
 
-    [Column("note")]
-    [StringLength(50)]
-    [Unicode(false)]
-    public string? Note { get; set; }
-
-    [Column("time", TypeName = "datetime")]
-    public DateTime? Time { get; set; }
-
     [Column("user_id")]
     public int? UserId { get; set; }
 
     [Column("table_id")]
     public int? TableId { get; set; }
+
+    [Column("time", TypeName = "datetime")]
+    public DateTime Time { get; set; }
+
+    [Column("note")]
+    [StringLength(50)]
+    [Unicode(false)]
+    public string? Note { get; set; }
 
     [ForeignKey("DiscountId")]
     [InverseProperty("OrderBills")]
