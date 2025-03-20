@@ -146,7 +146,7 @@ namespace QuanAnNhat.ViewModels
             using (var context = new QuanannhatContext())
             {
                 int _orderId = context.OrderBills.Count() + 1;
-                int? totalPrice = 0;
+                int totalPrice = 0;
                 foreach (var dish in Cart)
                 {
                     totalPrice += dish.Quantity * dish.Price;
@@ -159,7 +159,7 @@ namespace QuanAnNhat.ViewModels
                     BillStatus = 2,
                     Note = Notes,
                     UserId = _UserId,
-                    TableId = SelectedTable?.Id
+                    TableId = SelectedTable.Id
                 };
                 context.OrderBills.Add(orderBill);
                 context.SaveChanges();
