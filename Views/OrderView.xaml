@@ -275,14 +275,21 @@
                         FontSize="20"
                         Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         TextWrapping="Wrap" />
-                    <Button
+                    <Border
                         Grid.Row="1"
                         Margin="12"
                         Background="BlueViolet"
-                        Command="{Binding ExcutePayCommand}"
-                        Content="Pay"
-                        FontSize="40"
-                        Foreground="White" />
+                        CornerRadius="10"
+                        Cursor="Hand">
+                        <Border.InputBindings>
+                            <MouseBinding Command="{Binding ExcutePayCommand}" MouseAction="LeftClick" />
+                        </Border.InputBindings>
+                        <Label
+                            HorizontalAlignment="Center"
+                            Content="Pay"
+                            FontSize="40"
+                            Foreground="White" />
+                    </Border>
                 </Grid>
             </Grid>
         </Grid>

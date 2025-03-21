@@ -48,22 +48,32 @@ namespace QuanAnNhat.ViewModels
                 SetProperty(ref _SelectedTable, value);
             }
         }
-        public string? Notes { get; set; }
+        private string? _Notes;
+        public string? Notes
+        {
+            get => _Notes;
+            set => SetProperty(ref _Notes, value);
+        }
 
         private PayOS payOS;
         private Config? config;
         private List<ItemData> itemDatas;
         private PaymentData paymentData;
+        private int orderCode;
+        private string? paymentStatus;
         public OrderViewModel()
         {
             Dishlists = new ObservableCollection<Dishlist>();
             Dishes = new ObservableCollection<Dish>();
             Cart = new ObservableCollection<Dish>();
             Tables = new List<Table>();
+            orderCode = 0;
 
             GetMenu();
             GetDishlists();
             GetTables();
+
+            LiveData();
         }
 
         public void GetDishlists()
@@ -223,7 +233,7 @@ namespace QuanAnNhat.ViewModels
                 }
                 using (var context = new QuanannhatContext())
                 {
-                    int orderCode = GetOrderBillIdByUserId(_UserId);
+                    orderCode = GetOrderBillIdByUserId(_UserId);
                     paymentData = new PaymentData(orderCode, PaymentAmount, $"Thanh toan bill #{orderCode}", itemDatas, "http://localhost/", "http://localhost/");
 
                     CreatePaymentResult createPayment = await payOS.createPaymentLink(paymentData);
@@ -243,6 +253,38 @@ namespace QuanAnNhat.ViewModels
             SelectedTable = null;
             Notes = null;
             Cart.Clear();
+        }
+
+        public async void LiveData()
+        {
+            while (true)
+            {
+                await Task.Delay(5000);
+                using (var context = new QuanannhatContext())
+                {
+                    if (orderCode != 0)
+                    {
+                        PaymentLinkInformation information = await payOS.getPaymentLinkInformation(orderCode);
+                        paymentStatus = information.status;
+
+                        var _bill = context.OrderBills.Where(b => b.Id == orderCode).First();
+                        if (_bill.BillStatus == 2)
+                        {
+                            switch (paymentStatus)
+                            {
+                                case "CANCELLED":
+                                    context.OrderBills.Where(b => b.Id == orderCode).ExecuteUpdate(u => u.SetProperty(b => b.BillStatus, 1));
+                                    MessageBox.Show("Hủy thanh toán thành công!");
+                                    break;
+                                case "PAID":
+                                    context.OrderBills.Where(b => b.Id == orderCode).ExecuteUpdate(u => u.SetProperty(b => b.BillStatus, 3));
+                                    MessageBox.Show("Thanh toán thành công!");
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         [RelayCommand]
