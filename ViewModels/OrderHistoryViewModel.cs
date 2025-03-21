@@ -21,10 +21,9 @@ namespace QuanAnNhat.ViewModels
         public ObservableCollection<OrderBill> OrderBills { get; set; }
         public ObservableCollection<Order> Orders { get; set; }
         private bool IsDiscount = false;
+        private string? StatusText;
         private Brush BaseIconColor;
         private Brush BaseTextColor;
-        private string? StatusText;
-        public Brush CancelButtonColor { get; set; }
 
         [ObservableProperty]
         private Discount _DiscountVouncher;
@@ -69,7 +68,6 @@ namespace QuanAnNhat.ViewModels
 
             BaseIconColor = Brushes.Black;
             BaseTextColor = Brushes.White;
-            CancelButtonColor = BaseTextColor.Clone();
         }
 
         public void InitIconColor(int status)
@@ -112,13 +110,11 @@ namespace QuanAnNhat.ViewModels
                 {
                     case "Ordered":
                         StatusText = text;
-                        CancelButtonColor.Opacity = 1;
-                        _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 3 && ob.OrderStatus != 1).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
+                        _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 3).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
                         break;
                     case "Cancelled":
                         StatusText = text;
-                        CancelButtonColor.Opacity = 0.25;
-                        _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 3 && ob.OrderStatus == 1).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
+                        _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 1).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
                         break;
                 }
                 foreach (var bill in _orderbills)
@@ -165,38 +161,6 @@ namespace QuanAnNhat.ViewModels
             }
         }
 
-        public async void CancelOrder()
-        {
-            using (var context = new QuanannhatContext())
-            {
-                var res = context.OrderBills.Where(b => b.Id == OrderBillId).First();
-                if (res.OrderStatus == 3 || res.OrderStatus == 4)
-                {
-                    MessageBox.Show("Không thể hủy đơn!");
-                    return;
-                } else
-                {
-                    res.OrderStatus = 1;
-                    context.Update(res);
-                    await context.SaveChangesAsync();
-
-                    OrderBillId = 0;
-                    OrderTableId = 0;
-                    GetBillDetails(new OrderBill());
-                    MessageBox.Show("Hủy đơn thành công!");
-                }
-            }
-            OrderBills.Clear();
-            using (var context = new QuanannhatContext())
-            {
-                var res = await context.OrderBills.Where(ob => ob.BillStatus == 3 && ob.OrderStatus != 1).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
-                foreach (var bill in res)
-                {
-                    OrderBills.Add(bill);
-                }
-            }
-        }
-
         public async void LiveData()
         {
             while (true)
@@ -236,23 +200,6 @@ namespace QuanAnNhat.ViewModels
                     
                     GetBillDetails(bill);
                 }
-            }
-        }
-
-        [RelayCommand(CanExecute = nameof(CanExcuteCancelOrder))]
-        public void ExcuteCancelOrder()
-        {
-            CancelOrder();
-        }
-        public bool CanExcuteCancelOrder()
-        {
-            if (OrderBillId != 0 && StatusText.Equals("Ordered"))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
     }

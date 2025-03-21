@@ -331,15 +331,12 @@
                 Background="#B23D23"
                 CornerRadius="20"
                 Cursor="Hand">
-                <Border.InputBindings>
-                    <MouseBinding Command="{Binding ExcuteCancelOrderCommand}" MouseAction="LeftClick" />
-                </Border.InputBindings>
                 <Label
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Content="Cancel"
+                    Content="Đánh giá"
                     FontSize="34"
-                    Foreground="{Binding CancelButtonColor}" />
+                    Foreground="White" />
             </Border>
         </Grid>
     </Grid>
