@@ -123,6 +123,7 @@
                                             Command="{Binding DataContext.ExcuteGetBillDetailsCommand, ElementName=OrderBillsItemsControl}"
                                             CommandParameter="{Binding Id}"
                                             Content="Detail &gt;"
+                                            Cursor="Hand"
                                             FontSize="20" />
                                     </Grid>
                                 </Grid>
@@ -157,27 +158,27 @@
                     </Grid.ColumnDefinitions>
                     <fa:FontAwesome
                         FontSize="40"
-                        Foreground="Black"
+                        Foreground="{Binding OrderingIcon}"
                         Icon="ListAlt" />
                     <Label
                         Grid.Column="1"
                         Content="---------&gt;"
                         FontSize="20"
-                        Foreground="#989898" />
+                        Foreground="{Binding Arrow1}" />
                     <fa:FontAwesome
                         Grid.Column="2"
                         FontSize="35"
-                        Foreground="#989898"
+                        Foreground="{Binding ServedIcon}"
                         Icon="Heart" />
                     <Label
                         Grid.Column="3"
                         Content="---------&gt;"
                         FontSize="20"
-                        Foreground="#989898" />
+                        Foreground="{Binding Arrow2}" />
                     <fa:FontAwesome
                         Grid.Column="4"
                         FontSize="40"
-                        Foreground="#989898"
+                        Foreground="{Binding DoneIcon}"
                         Icon="CheckCircle" />
                 </Grid>
             </Border>
@@ -308,7 +309,7 @@
                     Grid.Column="2"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    Content="-0"
+                    Content="{Binding DiscountVouncher.DiscountPrice}"
                     FontSize="20"
                     Foreground="#9B9898" />
                 <Label
@@ -328,13 +329,17 @@
                 Grid.Row="4"
                 Margin="16"
                 Background="#B23D23"
-                CornerRadius="20">
+                CornerRadius="20"
+                Cursor="Hand">
+                <Border.InputBindings>
+                    <MouseBinding Command="{Binding ExcuteCancelOrderCommand}" MouseAction="LeftClick" />
+                </Border.InputBindings>
                 <Label
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Content="{Binding TextButton}"
+                    Content="Cancel"
                     FontSize="34"
-                    Foreground="White" />
+                    Foreground="{Binding CancelButtonColor}" />
             </Border>
         </Grid>
     </Grid>
