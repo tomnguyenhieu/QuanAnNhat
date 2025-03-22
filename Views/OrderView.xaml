@@ -26,30 +26,56 @@
                     Margin="20,20,20,10"
                     Background="#BC4C33"
                     CornerRadius="20">
+                    <Border.Effect>
+                        <DropShadowEffect
+                            BlurRadius="10"
+                            Direction="270"
+                            Opacity="0.4"
+                            ShadowDepth="1"
+                            Color="Black" />
+                    </Border.Effect>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="680" />
+                            <ColumnDefinition Width="600" />
+                            <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Border
-                            Margin="24,20,0,20"
-                            Background="White"
-                            CornerRadius="15">
-                            <TextBox
-                                Margin="14,0,0,0"
-                                VerticalContentAlignment="Center"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                FontFamily="Montserrat Alternates"
-                                FontSize="24"
-                                Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox
+                            HorizontalContentAlignment="Left"
+                            VerticalContentAlignment="Center"
+                            Style="{StaticResource SearchBarTheme}"
+                            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Border x:Name="SearchBtn" Grid.Column="1">
+                            <Border.Style>
+                                <Style>
+                                    <Style.Triggers>
+                                        <Trigger Property="Border.IsMouseOver" Value="True">
+                                            <Setter Property="Border.Opacity" Value="0.8" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <fa:FontAwesome
+                                VerticalAlignment="Center"
+                                Cursor="Hand"
+                                FontSize="34"
+                                Foreground="#F8E8D9"
+                                Icon="Search" />
                         </Border>
-                        <fa:FontAwesome
-                            Grid.Column="1"
-                            VerticalAlignment="Center"
-                            FontSize="34"
-                            Foreground="White"
-                            Icon="Search" />
+                        <ToggleButton
+                            x:Name="FilterBtn"
+                            Grid.Column="2"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Command="{Binding ExecuteFilterCommand}"
+                            CommandParameter="{Binding IsChecked, ElementName=FilterBtn}"
+                            Cursor="Hand">
+                            <fa:FontAwesome
+                                VerticalAlignment="Center"
+                                FontSize="34"
+                                Foreground="#F8E8D9"
+                                Icon="Filter" />
+                        </ToggleButton>
                     </Grid>
                 </Border>
             </Grid>
@@ -74,6 +100,7 @@
                                     Command="{Binding DataContext.ExcuteGetMenuCommand, ElementName=CategoriesItemControl}"
                                     CommandParameter="{Binding Name}"
                                     Content="{Binding Name}"
+                                    GroupName="CategoryRadioButton"
                                     Style="{StaticResource CategoryTheme}" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -125,7 +152,7 @@
                                                     Color="Black" />
                                             </Border.Effect>
                                         </Border>
-                                        <StackPanel Margin="12,8,12,0">
+                                        <StackPanel Margin="12,8,0,0">
                                             <TextBlock
                                                 FontFamily="Montserrat Alternates"
                                                 FontSize="20"
@@ -139,8 +166,8 @@
                                                 Text="{Binding Description}" />
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*" />
                                                     <ColumnDefinition />
+                                                    <ColumnDefinition Width="50" />
                                                 </Grid.ColumnDefinitions>
                                                 <TextBlock
                                                     HorizontalAlignment="Left"
@@ -149,12 +176,28 @@
                                                     FontWeight="SemiBold"
                                                     Foreground="#42150D"
                                                     Text="{Binding Price}" />
-                                                <Button
-                                                    Grid.Column="1"
-                                                    Width="80"
-                                                    Command="{Binding DataContext.ExcuteAddToCartCommand, ElementName=MenuItemControl}"
-                                                    CommandParameter="{Binding Id}"
-                                                    Content="Order" />
+                                                <Border Grid.Column="1">
+                                                    <Border.Style>
+                                                        <Style>
+                                                            <Style.Triggers>
+                                                                <Trigger Property="Border.IsMouseOver" Value="True">
+                                                                    <Setter Property="Border.Opacity" Value="0.8" />
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <Border.InputBindings>
+                                                        <MouseBinding
+                                                            Command="{Binding DataContext.ExcuteAddToCartCommand, ElementName=MenuItemControl}"
+                                                            CommandParameter="{Binding Id}"
+                                                            MouseAction="LeftClick" />
+                                                    </Border.InputBindings>
+                                                    <fa:FontAwesome
+                                                        Cursor="Hand"
+                                                        FontSize="40"
+                                                        Foreground="White"
+                                                        Icon="PlusCircle" />
+                                                </Border>
                                             </Grid>
                                         </StackPanel>
                                     </StackPanel>
@@ -170,15 +213,15 @@
                 </ScrollViewer>
             </Grid>
         </Grid>
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" Background="#FFEDDB">
             <Grid.RowDefinitions>
-                <RowDefinition Height="200" />
-                <RowDefinition Height="420" />
+                <RowDefinition Height="220" />
+                <RowDefinition Height="380" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <Grid>
+            <Grid Margin="20,5,20,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition x:Name="GRCustomerInfo" Height="50" />
+                    <RowDefinition x:Name="GRCustomerInfo" Height="60" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <Label Content="Customer information" Style="{StaticResource LabelTheme}" />
@@ -187,11 +230,45 @@
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <TextBlock FontSize="50" Text="Hieu" />
+                    <Border
+                        Margin="0,6,0,6"
+                        Background="#F5D5C2"
+                        CornerRadius="13">
+                        <Border.Effect>
+                            <DropShadowEffect
+                                BlurRadius="10"
+                                Direction="270"
+                                Opacity="0.4"
+                                ShadowDepth="1"
+                                Color="Black" />
+                        </Border.Effect>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label
+                                Margin="10,0,0,0"
+                                VerticalContentAlignment="Center"
+                                Content="Name:"
+                                FontFamily="Montserrat Alternates"
+                                FontSize="24"
+                                Foreground="#42150D" />
+                            <Label
+                                Grid.Column="1"
+                                VerticalContentAlignment="Center"
+                                Content="Nguyen Thi Duong Dua"
+                                FontFamily="Montserrat Alternates"
+                                FontSize="24"
+                                Foreground="#42150D" />
+                        </Grid>
+                    </Border>
                     <ComboBox
                         Grid.Row="1"
+                        Margin="0,6,0,6"
                         ItemsSource="{Binding Tables}"
-                        SelectedItem="{Binding SelectedTable, Mode=TwoWay}">
+                        SelectedItem="{Binding SelectedTable, Mode=TwoWay}"
+                        Style="{StaticResource ComboBoxFlatStyle}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock FontSize="20" Text="{Binding Id}" />
@@ -200,7 +277,7 @@
                     </ComboBox>
                 </Grid>
             </Grid>
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" Margin="20,20,20,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50" />
                     <RowDefinition />
@@ -212,18 +289,19 @@
                             <DataTemplate>
                                 <Border
                                     Height="110"
-                                    Margin="0,0,0,20"
-                                    Background="#D9D9D9"
+                                    Margin="0,0,0,10"
+                                    Background="#B03A25"
                                     CornerRadius="20">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="124" />
                                             <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
-                                        <Border
-                                            Margin="16"
-                                            Background="White"
-                                            CornerRadius="14" />
+                                        <Border Margin="16" CornerRadius="14">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="/Assets/Images/dish1.jpg" Stretch="UniformToFill" />
+                                            </Border.Background>
+                                        </Border>
                                         <Grid Grid.Column="1" Margin="10">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition />
@@ -231,48 +309,93 @@
                                             </Grid.RowDefinitions>
                                             <TextBlock
                                                 VerticalAlignment="Center"
+                                                FontFamily="Montserrat Alternates SemiBold"
                                                 FontSize="24"
+                                                Foreground="#FFEDDB"
                                                 Text="{Binding Name}" />
                                             <Grid Grid.Row="1">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition />
                                                     <ColumnDefinition />
                                                 </Grid.ColumnDefinitions>
-                                                <Border
-                                                    Margin="5"
-                                                    Background="White"
-                                                    CornerRadius="18">
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition />
-                                                            <ColumnDefinition />
-                                                            <ColumnDefinition />
-                                                        </Grid.ColumnDefinitions>
-                                                        <Button
-                                                            Background="Transparent"
-                                                            BorderThickness="0"
-                                                            Command="{Binding DataContext.ExcuteMinusCommand, ElementName=CartItemControl}"
-                                                            CommandParameter="{Binding Name}"
-                                                            Content="-" />
-                                                        <TextBlock
-                                                            Grid.Column="1"
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Border
+                                                        Background="#F5D5C2"
+                                                        BorderThickness="0"
+                                                        CornerRadius="15 0 0 15"
+                                                        Cursor="Hand">
+                                                        <Border.Style>
+                                                            <Style>
+                                                                <Style.Triggers>
+                                                                    <Trigger Property="UIElement.IsMouseOver" Value="True">
+                                                                        <Setter Property="UIElement.Opacity" Value="0.8" />
+                                                                    </Trigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Border.Style>
+                                                        <Border.InputBindings>
+                                                            <MouseBinding
+                                                                Command="{Binding DataContext.ExcuteMinusCommand, ElementName=CartItemControl}"
+                                                                CommandParameter="{Binding Name}"
+                                                                MouseAction="LeftClick" />
+                                                        </Border.InputBindings>
+                                                        <fa:FontAwesome
                                                             HorizontalAlignment="Center"
                                                             VerticalAlignment="Center"
+                                                            Foreground="#42150D"
+                                                            Icon="Minus" />
+                                                    </Border>
+                                                    <Border
+                                                        Grid.Column="1"
+                                                        Background="#F5D5C2"
+                                                        BorderThickness="0">
+                                                        <Label
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Content="{Binding Quantity}"
+                                                            FontFamily="Montserrat Alternates SemiBold"
                                                             FontSize="24"
-                                                            Text="{Binding Quantity}" />
-                                                        <Button
-                                                            Grid.Column="2"
-                                                            Background="Transparent"
-                                                            BorderThickness="0"
-                                                            Command="{Binding DataContext.ExcutePlusCommand, ElementName=CartItemControl}"
-                                                            CommandParameter="{Binding Name}"
-                                                            Content="+" />
-                                                    </Grid>
-                                                </Border>
+                                                            Foreground="#42150D" />
+                                                    </Border>
+                                                    <Border
+                                                        Grid.Column="2"
+                                                        Background="#F5D5C2"
+                                                        BorderThickness="0"
+                                                        CornerRadius="0 15 15 0"
+                                                        Cursor="Hand">
+                                                        <Border.Style>
+                                                            <Style>
+                                                                <Style.Triggers>
+                                                                    <Trigger Property="UIElement.IsMouseOver" Value="True">
+                                                                        <Setter Property="UIElement.Opacity" Value="0.8" />
+                                                                    </Trigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Border.Style>
+                                                        <Border.InputBindings>
+                                                            <MouseBinding
+                                                                Command="{Binding DataContext.ExcutePlusCommand, ElementName=CartItemControl}"
+                                                                CommandParameter="{Binding Name}"
+                                                                MouseAction="LeftClick" />
+                                                        </Border.InputBindings>
+                                                        <fa:FontAwesome
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Foreground="#42150D"
+                                                            Icon="Plus" />
+                                                    </Border>
+                                                </Grid>
                                                 <TextBlock
                                                     Grid.Column="1"
                                                     HorizontalAlignment="Right"
+                                                    FontFamily="Montserrat Alternates SemiBold"
                                                     FontSize="30"
+                                                    Foreground="#FFEDDB"
                                                     Text="{Binding Price}" />
                                             </Grid>
                                         </Grid>
@@ -283,36 +406,72 @@
                     </ItemsControl>
                 </ScrollViewer>
             </Grid>
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2" Margin="20,10,20,10">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
+                    <RowDefinition Height="40" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <Label Content="Notes" Style="{StaticResource LabelTheme}" />
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="140" />
+                        <RowDefinition Height="160" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <TextBox
-                        Background="#D9D9D9"
-                        FontSize="20"
-                        Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        TextWrapping="Wrap" />
+                    <Border
+                        Margin="0,0,0,20"
+                        Background="#F5D5C2"
+                        CornerRadius="13">
+                        <Border.Effect>
+                            <DropShadowEffect
+                                BlurRadius="10"
+                                Direction="270"
+                                Opacity="0.4"
+                                ShadowDepth="1"
+                                Color="Black" />
+                        </Border.Effect>
+                        <TextBox
+                            Margin="18"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Cursor="Pen"
+                            FontFamily="Montserrat Alternates"
+                            FontSize="24"
+                            Foreground="#42150D"
+                            Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            TextWrapping="Wrap" />
+                    </Border>
                     <Border
                         Grid.Row="1"
-                        Margin="12"
-                        Background="BlueViolet"
-                        CornerRadius="10"
+                        Background="#B03A25"
+                        CornerRadius="13"
                         Cursor="Hand">
+                        <Border.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <Trigger Property="Border.IsMouseOver" Value="True">
+                                        <Setter Property="Border.Opacity" Value="0.8" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Border.Effect>
+                            <DropShadowEffect
+                                BlurRadius="10"
+                                Direction="270"
+                                Opacity="0.4"
+                                ShadowDepth="1"
+                                Color="Black" />
+                        </Border.Effect>
                         <Border.InputBindings>
                             <MouseBinding Command="{Binding ExcutePayCommand}" MouseAction="LeftClick" />
                         </Border.InputBindings>
                         <Label
                             HorizontalAlignment="Center"
-                            Content="Pay"
-                            FontSize="40"
-                            Foreground="White" />
+                            VerticalAlignment="Center"
+                            Content="Process to checkout"
+                            FontFamily="Montserrat Alternates"
+                            FontSize="30"
+                            Foreground="#FFEDDB" />
                     </Border>
                 </Grid>
             </Grid>

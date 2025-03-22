@@ -69,52 +69,79 @@ namespace QuanAnNhat.ViewModels
             Tables = new List<Table>();
             orderCode = 0;
 
-            GetMenu();
             GetDishlists();
+            GetMenu(2);
             GetTables();
 
             LiveData();
         }
 
-        public void GetDishlists()
+        public async void GetDishlists()
         {
-            foreach (var item in DataProvider.Ins.Context.Dishlists.ToList())
+            using (var context = new QuanannhatContext())
             {
-                Dishlists.Add(item);
+                var res = await context.Dishlists.ToListAsync();
+                foreach (var item in res)
+                {
+                    Dishlists.Add(item);
+                }
             }
         }
 
-        public void GetMenu()
+        public async void GetMenu(int filterStatus)
         {
             Dishes.Clear();
-            foreach (var item in DataProvider.Ins.Context.Dishes.ToList())
+            using (var context = new QuanannhatContext())
             {
-                Dishes.Add(item);
+                switch (filterStatus)
+                {
+                    case 1:
+                        var res1 = await context.Dishes.OrderBy(d => d.Price).ToListAsync();
+                        foreach (var item in res1)
+                        {
+                            Dishes.Add(item);
+                        }
+                        break;
+                    case 2:
+                        var res2 = await context.Dishes.OrderByDescending(d => d.Price).ToListAsync();
+                        foreach (var item in res2)
+                        {
+                            Dishes.Add(item);
+                        }
+                        break;
+                }
             }
         }
 
-        public void GetMenuByCategory(string? category)
+        public async void GetMenuByCategory(string? category)
         {
             Dishes.Clear();
-            var _dishes = DataProvider.Ins.Context.Dishes.Include(x => x.Dishlist).Where(x => x.Dishlist.Name == category && x.DishlistId == x.Dishlist.Id).ToList();
-            foreach (var item in _dishes)
+            using (var context = new QuanannhatContext())
             {
-                Dishes.Add(item);
+                var res = await context.Dishes.Include(x => x.Dishlist).Where(x => x.Dishlist.Name == category && x.DishlistId == x.Dishlist.Id).ToListAsync();
+                foreach (var item in res)
+                {
+                    Dishes.Add(item);
+                }
             }
         }
 
-        public void SearchDishes(string? searchText)
+        public async void SearchDishes(string? searchText)
         {
             Dishes.Clear();
-            var _dishes = DataProvider.Ins.Context.Dishes.Where(x => x.Name.Contains(searchText)).ToList();
-            foreach (var item in _dishes)
+            using (var context = new QuanannhatContext())
             {
-                Dishes.Add(item);
+                var res = await context.Dishes.Where(x => x.Name.Contains(searchText)).ToListAsync();
+                foreach (var item in res)
+                {
+                    Dishes.Add(item);
+                }
             }
         }
 
         public void AddToCart(int dishId)
         {
+            
             var dish = DataProvider.Ins.Context.Dishes.Where(x => x.Id == dishId).First();
             if (!Cart.Contains(dish))
             {
@@ -124,14 +151,19 @@ namespace QuanAnNhat.ViewModels
             else
             {
                 dish.Quantity += 1;
+                dish.Price += dish.Price;
             }
         }
 
-        public void GetTables()
+        public async void GetTables()
         {
-            foreach (var table in DataProvider.Ins.Context.Tables.ToList())
+            using (var context = new QuanannhatContext())
             {
-                Tables.Add(table);
+                var res = await context.Tables.Where(t => t.Status == 2).ToListAsync();
+                foreach (var table in res)
+                {
+                    Tables.Add(table);
+                }
             }
         }
 
@@ -316,6 +348,13 @@ namespace QuanAnNhat.ViewModels
         }
 
         [RelayCommand]
+        public void ExecuteFilter(object parameter)
+        {
+            int filterStatus = Convert.ToBoolean(parameter) ? 1 : 2;
+            GetMenu(filterStatus);
+        }
+
+        [RelayCommand]
         public void ExcuteGetMenu(object parameter)
         {
             GetMenuByCategory(parameter.ToString());
@@ -335,6 +374,7 @@ namespace QuanAnNhat.ViewModels
                 if (dish.Name.Equals(parameter))
                 {
                     dish.Quantity += 1;
+                    dish.Price += dish.Price;
                 }
             }
         }
