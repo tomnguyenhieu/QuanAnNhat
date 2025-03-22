@@ -27,8 +27,13 @@ public partial class Dish : ObservableObject
     [Unicode(false)]
     public string? Thumbnail { get; set; }
 
+    private int _Price;
     [Column("price")]
-    public int Price { get; set; }
+    public int Price
+    {
+        get => _Price;
+        set => SetProperty(ref _Price, value);
+    }
 
     [Column("description")]
     [StringLength(255)]
