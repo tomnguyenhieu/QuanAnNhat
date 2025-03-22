@@ -100,13 +100,10 @@
                     <RowDefinition Height="{Binding Height, ElementName=GRLabel}" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock
+                <Label
                     x:Name="TBName"
-                    FontFamily="Montserrat Alternates"
-                    FontSize="30"
-                    FontWeight="Bold"
-                    Foreground="#1B1B18"
-                    Text="Must Try" />
+                    Content="Must Try"
+                    Style="{StaticResource LabelTheme}" />
                 <ScrollViewer
                     Grid.Row="1"
                     HorizontalScrollBarVisibility="Auto"
@@ -172,13 +169,10 @@
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </ScrollViewer>
-                <TextBlock
+                <Label
                     Grid.Row="2"
-                    FontFamily="{Binding FontFamily, ElementName=TBName}"
-                    FontSize="{Binding FontSize, ElementName=TBName}"
-                    FontWeight="{Binding FontWeight, ElementName=TBName}"
-                    Foreground="{Binding Foreground, ElementName=TBName}"
-                    Text="Best Seller" />
+                    Content="Best Seller"
+                    Style="{StaticResource LabelTheme}" />
                 <ScrollViewer
                     Grid.Row="3"
                     Margin="0,0,0,6"

@@ -1,8 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Style
-        x:Key="CategoryTheme"
-        BasedOn="{StaticResource {x:Type ToggleButton}}"
-        TargetType="{x:Type RadioButton}">
+    <Style x:Key="CategoryTheme" TargetType="{x:Type RadioButton}">
         <Style.Setters>
             <Setter Property="Template">
                 <Setter.Value>
@@ -12,9 +9,17 @@
                             MinWidth="150"
                             Margin="0,0,20,0"
                             Padding="14,0,14,0"
-                            Background="#BC4C33"
+                            Background="{TemplateBinding Background}"
                             CornerRadius="12"
                             Cursor="Hand">
+                            <Border.Effect>
+                                <DropShadowEffect
+                                    BlurRadius="10"
+                                    Direction="270"
+                                    Opacity="0.4"
+                                    ShadowDepth="1"
+                                    Color="Black" />
+                            </Border.Effect>
                             <TextBlock
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
@@ -22,11 +27,19 @@
                                 FontSize="24"
                                 FontWeight="Regular"
                                 Foreground="#F5D5C2"
+                                Opacity="1"
                                 Text="{TemplateBinding Property=Content}" />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Setter Property="Background" Value="#BC4C33" />
+            <Setter Property="Opacity" Value="0.5" />
         </Style.Setters>
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Opacity" Value="1" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>

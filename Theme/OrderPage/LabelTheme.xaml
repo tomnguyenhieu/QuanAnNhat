@@ -9,7 +9,7 @@
                                 VerticalAlignment="Center"
                                 FontFamily="Montserrat Alternates SemiBold"
                                 FontSize="30"
-                                FontWeight="Medium"
+                                FontWeight="SemiBold"
                                 Foreground="#42150D"
                                 Text="{TemplateBinding Property=Content}" />
                         </Grid>
