@@ -32,6 +32,8 @@ namespace QuanAnNhat.ViewModels
         [ObservableProperty]
         private int _OrderTableId;
         [ObservableProperty]
+        private string? _OrderBillNotes;
+        [ObservableProperty]
         private int? _OrderBillSubtotal;
         [ObservableProperty]
         private int? _OrderBillTotal;
@@ -64,6 +66,7 @@ namespace QuanAnNhat.ViewModels
 
             OrderBillSubtotal = 0;
             OrderBillTotal = 0;
+            OrderBillNotes = null;
             StatusText = "Ordered";
 
             BaseIconColor = Brushes.Black;
@@ -125,6 +128,7 @@ namespace QuanAnNhat.ViewModels
 
             OrderBillId = 0;
             OrderTableId = 0;
+            OrderBillNotes = null;
             GetBillDetails(new OrderBill());
         }
 
@@ -132,6 +136,7 @@ namespace QuanAnNhat.ViewModels
         {
             OrderBillSubtotal = 0;
             OrderBillTotal = 0;
+            OrderBillNotes = orderBill.Note;
 
             Orders.Clear();
             using (var context = new QuanannhatContext())

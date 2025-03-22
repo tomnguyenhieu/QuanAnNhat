@@ -48,7 +48,10 @@
                 </StackPanel>
             </Grid>
             <ScrollViewer Grid.Row="1">
-                <ItemsControl x:Name="OrderBillsItemsControl" ItemsSource="{Binding OrderBills}">
+                <ItemsControl
+                    x:Name="OrderBillsItemsControl"
+                    HorizontalAlignment="Left"
+                    ItemsSource="{Binding OrderBills}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border
@@ -140,8 +143,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="110" />
                 <RowDefinition Height="110" />
-                <RowDefinition Height="350" />
-                <RowDefinition Height="210" />
+                <RowDefinition Height="280" />
+                <RowDefinition Height="180" />
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Border
@@ -273,7 +276,18 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </ScrollViewer>
-            <Grid Grid.Row="3" ShowGridLines="True">
+            <Border
+                Grid.Row="3"
+                Margin="14"
+                Background="White"
+                CornerRadius="20">
+                <TextBlock
+                    Margin="16"
+                    FontSize="24"
+                    Text="{Binding OrderBillNotes}"
+                    TextWrapping="Wrap" />
+            </Border>
+            <Grid Grid.Row="4" ShowGridLines="True">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="160" />
@@ -325,19 +339,6 @@
                     Content="Cash"
                     Style="{StaticResource LabelTheme}" />
             </Grid>
-            <Border
-                Grid.Row="4"
-                Margin="16"
-                Background="#B23D23"
-                CornerRadius="20"
-                Cursor="Hand">
-                <Label
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Content="Đánh giá"
-                    FontSize="34"
-                    Foreground="White" />
-            </Border>
         </Grid>
     </Grid>
 </UserControl>
