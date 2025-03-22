@@ -139,12 +139,36 @@ namespace QuanAnNhat.ViewModels
         {
             if (SelectedTable is null)
             {
-                MessageBox.Show("Vui long chon ban!");
+                MessageBox.Show("Vui lòng chọn bàn!");
                 return false;
             }
             if (Cart.Count() < 1)
             {
-                MessageBox.Show("Vui long chon mon an!");
+                MessageBox.Show("Vui lòng chọn món ăn!");
+                return false;
+            }
+            List<Dish> _UnAvailableDishes = new List<Dish>();
+            using (var context = new QuanannhatContext())
+            {
+                foreach (var dish in Cart)
+                {
+                    foreach (var _dish in context.Dishes.ToList())
+                    {
+                        if (dish.Id == _dish.Id && _dish.Quantity == 0)
+                        {
+                            _UnAvailableDishes.Add(dish);
+                        }
+                    }
+                }
+            }
+            if (_UnAvailableDishes.Count > 0)
+            {
+                string _names = "";
+                foreach (var dish in _UnAvailableDishes)
+                {
+                    _names += $"{dish.Name}, ";
+                }
+                MessageBox.Show($"Hết món {_names}!");
                 return false;
             }
             return true;
@@ -176,6 +200,32 @@ namespace QuanAnNhat.ViewModels
             }
         }
 
+        public void CreateOrders()
+        {
+            using (var context = new QuanannhatContext())
+            {
+                int _orderId = context.Orders.ToList().Count();
+                var res = context.Dishes.ToList();
+                foreach (var dish in Cart)
+                {
+                    foreach (var _dish in res)
+                    {
+                        _orderId += 1;
+                        Order order = new Order()
+                        {
+                            Id = _orderId,
+                            DishId = dish.Id,
+                            Quantity = dish.Quantity,
+                            TotalPrice = dish.Quantity * dish.Price,
+                            OrderbillId = GetOrderBillIdByUserId(_UserId)
+                        };
+                        context.Orders.Add(order);
+                    }
+                }
+                context.SaveChanges();
+            }
+        }
+
         public int GetOrderBillIdByUserId(int userId)
         {
             int orderBillId = 0;
@@ -187,28 +237,6 @@ namespace QuanAnNhat.ViewModels
                 }
             }
             return orderBillId;
-        }
-
-        public void CreateOrders()
-        {
-            using (var context = new QuanannhatContext())
-            {
-                int _orderId = context.Orders.ToList().Count();
-                foreach (var dish in Cart)
-                {
-                    _orderId += 1;
-                    Order order = new Order()
-                    {
-                        Id = _orderId,
-                        DishId = dish.Id,
-                        Quantity = dish.Quantity,
-                        TotalPrice = dish.Quantity * dish.Price,
-                        OrderbillId = GetOrderBillIdByUserId(_UserId)
-                    };
-                    context.Orders.Add(order);
-                }
-                context.SaveChanges();
-            }
         }
 
         public async void HandlePayment()
