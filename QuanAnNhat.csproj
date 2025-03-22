@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <None Remove="Assets\Images\background.png" />
+    <None Remove="Assets\Images\dish1.jpg" />
     <None Remove="Assets\Images\intro1.jpg" />
     <None Remove="Assets\Images\intro2.jpg" />
     <None Remove="Assets\Images\intro3.jpg" />
@@ -37,6 +38,7 @@
 
   <ItemGroup>
     <Resource Include="Assets\Images\background.png" />
+    <Resource Include="Assets\Images\dish1.jpg" />
     <Resource Include="Assets\Images\intro1.jpg" />
     <Resource Include="Assets\Images\intro2.jpg" />
     <Resource Include="Assets\Images\intro3.jpg" />
