@@ -111,7 +111,7 @@
                     Grid.Row="1"
                     HorizontalScrollBarVisibility="Auto"
                     VerticalScrollBarVisibility="Disabled">
-                    <ItemsControl ItemsSource="{Binding BestSellerDishes}">
+                    <ItemsControl ItemsSource="{Binding MustTryDishes}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border
@@ -128,10 +128,10 @@
                                             Color="Black" />
                                     </Border.Effect>
                                     <StackPanel Margin="10">
-                                        <Border
-                                            Height="120"
-                                            Background="White"
-                                            CornerRadius="20">
+                                        <Border Height="120" CornerRadius="20">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="/Assets/Images/dish1.jpg" Stretch="UniformToFill" />
+                                            </Border.Background>
                                             <Border.Effect>
                                                 <DropShadowEffect
                                                     BlurRadius="10"
@@ -184,7 +184,7 @@
                     Margin="0,0,0,6"
                     HorizontalScrollBarVisibility="Auto"
                     VerticalScrollBarVisibility="Disabled">
-                    <ItemsControl ItemsSource="{Binding MustTryDishes}">
+                    <ItemsControl ItemsSource="{Binding BestSellerDishes}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border
@@ -201,10 +201,10 @@
                                             Color="Black" />
                                     </Border.Effect>
                                     <StackPanel Margin="10">
-                                        <Border
-                                            Height="115"
-                                            Background="White"
-                                            CornerRadius="20">
+                                        <Border Height="115" CornerRadius="20">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="/Assets/Images/dish1.jpg" Stretch="UniformToFill" />
+                                            </Border.Background>
                                             <Border.Effect>
                                                 <DropShadowEffect
                                                     BlurRadius="10"
