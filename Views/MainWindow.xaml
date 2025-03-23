@@ -19,12 +19,12 @@
         <viewmodels:MainViewModel x:Key="MainVM" />
     </Window.Resources>
     <Border Background="#f5d3b3" DataContext="{StaticResource MainVM}">
-        <Grid ShowGridLines="True">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="sideBarGrid" Width="300" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Grid Background="#3A3935" ShowGridLines="True">
+            <Grid Background="#3A3935">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="250" />
                     <RowDefinition />
