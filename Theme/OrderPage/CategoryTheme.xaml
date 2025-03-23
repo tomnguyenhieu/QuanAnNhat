@@ -34,14 +34,14 @@
                 </Setter.Value>
             </Setter>
             <Setter Property="Background" Value="#BC4C33" />
-            <Setter Property="Opacity" Value="0.75" />
+            <Setter Property="Opacity" Value="0.8" />
         </Style.Setters>
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Opacity" Value="1" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Opacity" Value="0.9" />
+                <Setter Property="Opacity" Value="1" />
             </Trigger>
         </Style.Triggers>
     </Style>
