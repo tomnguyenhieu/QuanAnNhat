@@ -26,6 +26,8 @@ namespace QuanAnNhat.ViewModels
         private Brush BaseTextColor;
 
         [ObservableProperty]
+        private string? _PaymentMethodText;
+        [ObservableProperty]
         private Discount _DiscountVouncher;
         [ObservableProperty]
         private int _OrderBillId;
@@ -84,21 +86,21 @@ namespace QuanAnNhat.ViewModels
             switch (status)
             {
                 case 1:
-                    Arrow1.Opacity = 0.25;
-                    Arrow2.Opacity = 0.25;
-                    OrderingIcon.Opacity = 0.25;
-                    ServedIcon.Opacity = 0.25;
-                    DoneIcon.Opacity = 0.25;
+                    Arrow1.Opacity = 0.5;
+                    Arrow2.Opacity = 0.5;
+                    OrderingIcon.Opacity = 0.5;
+                    ServedIcon.Opacity = 0.5;
+                    DoneIcon.Opacity = 0.5;
                     break;
                 case 2:
-                    Arrow1.Opacity = 0.25;
-                    Arrow2.Opacity = 0.25;
-                    ServedIcon.Opacity = 0.25;
-                    DoneIcon.Opacity = 0.25;
+                    Arrow1.Opacity = 0.5;
+                    Arrow2.Opacity = 0.5;
+                    ServedIcon.Opacity = 0.5;
+                    DoneIcon.Opacity = 0.5;
                     break;
                 case 3:
-                    Arrow2.Opacity = 0.25;
-                    DoneIcon.Opacity = 0.25;
+                    Arrow2.Opacity = 0.5;
+                    DoneIcon.Opacity = 0.5;
                     break;
             }
         }
@@ -137,6 +139,13 @@ namespace QuanAnNhat.ViewModels
             OrderBillSubtotal = 0;
             OrderBillTotal = 0;
             OrderBillNotes = orderBill.Note;
+            if (orderBill.Id != 0)
+            {
+                PaymentMethodText = "Checkout";
+            } else
+            {
+                PaymentMethodText = "";
+            }
 
             Orders.Clear();
             using (var context = new QuanannhatContext())

@@ -13,20 +13,17 @@
     <UserControl.Resources>
         <viewmodels:OrderHistoryViewModel x:Key="OrderHistoryVM" />
     </UserControl.Resources>
-    <Grid
-        Background="White"
-        DataContext="{StaticResource OrderHistoryVM}"
-        ShowGridLines="True">
+    <Grid DataContext="{StaticResource OrderHistoryVM}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="800" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Grid ShowGridLines="True">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="180" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
+            <Grid Grid.Row="0" Margin="20,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="70" />
                     <RowDefinition />
@@ -38,16 +35,17 @@
                         Command="{Binding ExcuteGetOrderBillsCommand}"
                         CommandParameter="{Binding Content, ElementName=OrderedBtn}"
                         Content="Ordered"
-                        Style="{StaticResource StatusButtonTheme}" />
+                        IsChecked="True"
+                        Style="{StaticResource CategoryTheme}" />
                     <RadioButton
                         x:Name="CancelledBtn"
                         Command="{Binding ExcuteGetOrderBillsCommand}"
                         CommandParameter="{Binding Content, ElementName=CancelledBtn}"
                         Content="Cancelled"
-                        Style="{StaticResource StatusButtonTheme}" />
+                        Style="{StaticResource CategoryTheme}" />
                 </StackPanel>
             </Grid>
-            <ScrollViewer Grid.Row="1">
+            <ScrollViewer Grid.Row="1" Margin="0,0,12,0">
                 <ItemsControl
                     x:Name="OrderBillsItemsControl"
                     HorizontalAlignment="Left"
@@ -55,22 +53,36 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border
-                                Width="700"
-                                Height="200"
-                                Margin="0,0,0,20"
-                                Background="#D9D9D9"
-                                CornerRadius="12">
-                                <Grid Margin="20,0,20,0" ShowGridLines="True">
+                                Width="740"
+                                Height="210"
+                                Margin="20,0,0,20"
+                                Background="#FFEDDB"
+                                CornerRadius="13">
+                                <Border.Effect>
+                                    <DropShadowEffect
+                                        BlurRadius="10"
+                                        Direction="270"
+                                        Opacity="0.4"
+                                        ShadowDepth="1"
+                                        Color="Black" />
+                                </Border.Effect>
+                                <Grid Margin="20,0,20,0">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="500" />
+                                        <ColumnDefinition Width="530" />
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
-                                    <Grid ShowGridLines="True">
+                                    <Grid Margin="0,0,20,0">
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="50" />
+                                            <RowDefinition Height="42" />
                                             <RowDefinition />
                                         </Grid.RowDefinitions>
-                                        <Label Content="{Binding Time}" FontSize="30" />
+                                        <Label
+                                            VerticalAlignment="Center"
+                                            Content="{Binding Time}"
+                                            FontFamily="Montserrat Alternates"
+                                            FontSize="18"
+                                            FontWeight="Medium"
+                                            Foreground="#42150D" />
                                         <ScrollViewer
                                             Grid.Row="1"
                                             HorizontalScrollBarVisibility="Auto"
@@ -78,23 +90,27 @@
                                             <ItemsControl ItemsSource="{Binding Orders}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <Border
-                                                            Width="120"
-                                                            Height="120"
-                                                            Margin="0,0,20,0"
-                                                            Background="#B23D23">
-                                                            <Grid>
-                                                                <Grid.RowDefinitions>
-                                                                    <RowDefinition />
-                                                                    <RowDefinition Height="30" />
-                                                                </Grid.RowDefinitions>
-                                                                <Label
-                                                                    Grid.Row="1"
-                                                                    Background="White"
-                                                                    Content="{Binding Dish.Name}"
-                                                                    FontSize="16" />
-                                                            </Grid>
-                                                        </Border>
+                                                        <Grid Margin="0,0,20,0">
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition />
+                                                                <RowDefinition Height="30" />
+                                                            </Grid.RowDefinitions>
+                                                            <Border
+                                                                Width="120"
+                                                                Height="120"
+                                                                CornerRadius="13">
+                                                                <Border.Background>
+                                                                    <ImageBrush ImageSource="/Assets/Images/dish1.jpg" Stretch="UniformToFill" />
+                                                                </Border.Background>
+                                                            </Border>
+                                                            <Label
+                                                                Grid.Row="1"
+                                                                HorizontalAlignment="Center"
+                                                                Content="{Binding Dish.Name}"
+                                                                FontFamily="Montserrat Alternates Medium"
+                                                                FontSize="16"
+                                                                Foreground="#42150D" />
+                                                        </Grid>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                                 <ItemsControl.ItemsPanel>
@@ -105,29 +121,69 @@
                                             </ItemsControl>
                                         </ScrollViewer>
                                     </Grid>
-                                    <Grid
-                                        Grid.Column="1"
-                                        Margin="10,0,0,0"
-                                        ShowGridLines="True">
+                                    <Grid Grid.Column="1" Margin="10,0,0,0">
                                         <Grid.RowDefinitions>
                                             <RowDefinition />
                                             <RowDefinition />
                                             <RowDefinition />
                                         </Grid.RowDefinitions>
-                                        <Label Content="Total Price" FontSize="30" />
+                                        <Label
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Content="Total Price"
+                                            FontFamily="Montserrat Alternates Medium"
+                                            FontSize="24"
+                                            Foreground="#42150D" />
                                         <Label
                                             Grid.Row="1"
+                                            HorizontalAlignment="Center"
                                             Content="{Binding TotalPrice}"
-                                            FontSize="30" />
-                                        <Button
+                                            FontFamily="Montserrat Alternates Medium"
+                                            FontSize="40"
+                                            Foreground="#42150D" />
+                                        <Border
                                             Grid.Row="2"
                                             Margin="10"
-                                            Background="White"
-                                            Command="{Binding DataContext.ExcuteGetBillDetailsCommand, ElementName=OrderBillsItemsControl}"
-                                            CommandParameter="{Binding Id}"
-                                            Content="Detail &gt;"
-                                            Cursor="Hand"
-                                            FontSize="20" />
+                                            Background="#B23D23"
+                                            CornerRadius="20"
+                                            Cursor="Hand">
+                                            <Border.Effect>
+                                                <DropShadowEffect
+                                                    BlurRadius="10"
+                                                    Direction="270"
+                                                    Opacity="0.4"
+                                                    ShadowDepth="1"
+                                                    Color="Black" />
+                                            </Border.Effect>
+                                            <Border.Style>
+                                                <Style>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="Border.IsMouseOver" Value="True">
+                                                            <Setter Property="Border.Opacity" Value="0.8" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <Border.InputBindings>
+                                                <MouseBinding
+                                                    Command="{Binding DataContext.ExcuteGetBillDetailsCommand, ElementName=OrderBillsItemsControl}"
+                                                    CommandParameter="{Binding Id}"
+                                                    MouseAction="LeftClick" />
+                                            </Border.InputBindings>
+                                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                                <Label
+                                                    Content="Detail"
+                                                    FontSize="26"
+                                                    Foreground="#FFEDDB" />
+                                                <fa:FontAwesome
+                                                    Grid.Column="1"
+                                                    Margin="5,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="18"
+                                                    Foreground="#FFEDDB"
+                                                    Icon="CaretRight" />
+                                            </StackPanel>
+                                        </Border>
                                     </Grid>
                                 </Grid>
                             </Border>
@@ -136,10 +192,7 @@
                 </ItemsControl>
             </ScrollViewer>
         </Grid>
-        <Grid
-            Grid.Column="1"
-            Background="#D9D9D9"
-            ShowGridLines="True">
+        <Grid Grid.Column="1" Background="#FFEDDB">
             <Grid.RowDefinitions>
                 <RowDefinition Height="110" />
                 <RowDefinition Height="110" />
@@ -149,8 +202,16 @@
             </Grid.RowDefinitions>
             <Border
                 Margin="14"
-                Background="White"
-                CornerRadius="20">
+                Background="#F5D5C2"
+                CornerRadius="13">
+                <Border.Effect>
+                    <DropShadowEffect
+                        BlurRadius="10"
+                        Direction="270"
+                        Opacity="0.4"
+                        ShadowDepth="1"
+                        Color="Black" />
+                </Border.Effect>
                 <Grid VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -198,16 +259,28 @@
                         Margin="0,0,5,0"
                         Background="#B23D23"
                         CornerRadius="10">
+                        <Border.Effect>
+                            <DropShadowEffect
+                                BlurRadius="10"
+                                Direction="270"
+                                Opacity="0.4"
+                                ShadowDepth="1"
+                                Color="Black" />
+                        </Border.Effect>
                         <StackPanel
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
                             <Label
-                                Content="Mã hóa đơn:"
+                                VerticalAlignment="Center"
+                                Content="Bill Id:"
+                                FontFamily="Montserrat Alternates Medium"
                                 FontSize="24"
                                 Foreground="#FFEFEC" />
                             <Label
+                                VerticalAlignment="Center"
                                 Content="{Binding OrderBillId}"
+                                FontFamily="Montserrat Alternates Medium"
                                 FontSize="24"
                                 Foreground="#FFEFEC" />
                         </StackPanel>
@@ -216,17 +289,29 @@
                         Grid.Column="1"
                         Margin="5,0,0,0"
                         Background="#B23D23"
-                        CornerRadius="10">
+                        CornerRadius="13">
+                        <Border.Effect>
+                            <DropShadowEffect
+                                BlurRadius="10"
+                                Direction="270"
+                                Opacity="0.4"
+                                ShadowDepth="1"
+                                Color="Black" />
+                        </Border.Effect>
                         <StackPanel
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
                             <Label
-                                Content="Số bàn:"
+                                VerticalAlignment="Center"
+                                Content="Table:"
+                                FontFamily="Montserrat Alternates Medium"
                                 FontSize="24"
                                 Foreground="#FFEFEC" />
                             <Label
+                                VerticalAlignment="Center"
                                 Content="{Binding OrderTableId}"
+                                FontFamily="Montserrat Alternates Medium"
                                 FontSize="24"
                                 Foreground="#FFEFEC" />
                         </StackPanel>
@@ -237,13 +322,13 @@
                 <ItemsControl ItemsSource="{Binding Orders}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Height="90" Margin="10,10,0,10">
+                            <Border Height="90" Margin="20,10,0,10">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="45" />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <Label Content="{Binding Dish.Name}" FontSize="30" />
+                                    <Label Content="{Binding Dish.Name}" Style="{StaticResource LabelTheme}" />
                                     <Grid Grid.Row="1">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition />
@@ -253,16 +338,34 @@
                                             <Label
                                                 Width="100"
                                                 Content="{Binding Dish.Price}"
-                                                FontSize="24" />
-                                            <Label Content="x" FontSize="24" />
-                                            <Label Content="{Binding Quantity}" FontSize="24" />
+                                                FontFamily="Montserrat Alternates"
+                                                FontSize="24"
+                                                Foreground="#42150D" />
+                                            <Label
+                                                Content="x"
+                                                FontFamily="Montserrat Alternates"
+                                                FontSize="24"
+                                                Foreground="#42150D" />
+                                            <Label
+                                                Content="{Binding Quantity}"
+                                                FontFamily="Montserrat Alternates"
+                                                FontSize="24"
+                                                Foreground="#42150D" />
                                         </StackPanel>
                                         <StackPanel
                                             Grid.Column="1"
                                             HorizontalAlignment="Right"
                                             Orientation="Horizontal">
-                                            <Label Content="$" FontSize="24" />
-                                            <Label Content="{Binding TotalPrice}" FontSize="24" />
+                                            <Label
+                                                Content="$"
+                                                FontFamily="Montserrat Alternates SemiBold"
+                                                FontSize="24"
+                                                Foreground="#42150D" />
+                                            <Label
+                                                Content="{Binding TotalPrice}"
+                                                FontFamily="Montserrat Alternates SemiBold"
+                                                FontSize="24"
+                                                Foreground="#42150D" />
                                         </StackPanel>
                                     </Grid>
                                 </Grid>
@@ -279,15 +382,25 @@
             <Border
                 Grid.Row="3"
                 Margin="14"
-                Background="White"
-                CornerRadius="20">
+                Background="#F5D5C2"
+                CornerRadius="15">
+                <Border.Effect>
+                    <DropShadowEffect
+                        BlurRadius="10"
+                        Direction="270"
+                        Opacity="0.4"
+                        ShadowDepth="1"
+                        Color="Black" />
+                </Border.Effect>
                 <TextBlock
                     Margin="16"
+                    FontFamily="Montserrat Alternates"
                     FontSize="24"
+                    Foreground="#42150D"
                     Text="{Binding OrderBillNotes}"
                     TextWrapping="Wrap" />
             </Border>
-            <Grid Grid.Row="4" ShowGridLines="True">
+            <Grid Grid.Row="4" Margin="20,10,20,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="160" />
@@ -303,6 +416,7 @@
                     Grid.Row="1"
                     VerticalContentAlignment="Center"
                     Content="Discount"
+                    FontFamily="Montserrat Alternates"
                     FontSize="20"
                     Foreground="#9B9898" />
                 <Label
@@ -311,32 +425,39 @@
                     Style="{StaticResource LabelTheme}" />
                 <Label
                     Grid.Row="3"
-                    Content="Payment methods"
+                    Content="Payment methods:"
                     Style="{StaticResource LabelTheme}" />
                 <Label
                     Grid.Column="1"
                     HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
                     Content="{Binding OrderBillSubtotal}"
-                    FontSize="30" />
+                    FontFamily="Montserrat Alternates SemiBold"
+                    FontSize="30"
+                    Foreground="#42150D" />
                 <Label
                     Grid.Row="1"
                     Grid.Column="2"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Content="{Binding DiscountVouncher.DiscountPrice}"
+                    FontFamily="Montserrat Alternates"
                     FontSize="20"
                     Foreground="#9B9898" />
                 <Label
                     Grid.Row="2"
                     Grid.Column="2"
                     HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
                     Content="{Binding OrderBillTotal}"
-                    FontSize="30" />
+                    FontFamily="Montserrat Alternates SemiBold"
+                    FontSize="30"
+                    Foreground="#42150D" />
                 <Label
                     Grid.Row="3"
                     Grid.Column="2"
                     HorizontalAlignment="Right"
-                    Content="Cash"
+                    Content="{Binding PaymentMethodText}"
                     Style="{StaticResource LabelTheme}" />
             </Grid>
         </Grid>
