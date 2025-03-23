@@ -10,10 +10,7 @@
     d:DesignHeight="900"
     d:DesignWidth="1300"
     mc:Ignorable="d">
-    <UserControl.Resources>
-        <viewmodels:OrderHistoryViewModel x:Key="OrderHistoryVM" />
-    </UserControl.Resources>
-    <Grid DataContext="{StaticResource OrderHistoryVM}">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="800" />
             <ColumnDefinition />
@@ -28,7 +25,10 @@
                     <RowDefinition Height="70" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Label Content="Status" Style="{StaticResource LabelTheme}" />
+                <Label
+                    VerticalAlignment="Bottom"
+                    Content="Status"
+                    Style="{StaticResource LabelTheme}" />
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                     <RadioButton
                         x:Name="OrderedBtn"

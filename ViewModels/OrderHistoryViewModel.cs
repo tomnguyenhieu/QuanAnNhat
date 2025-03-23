@@ -23,7 +23,6 @@ namespace QuanAnNhat.ViewModels
         private bool IsDiscount = false;
         private string? StatusText;
         private Brush BaseIconColor;
-        private Brush BaseTextColor;
 
         [ObservableProperty]
         private string? _PaymentMethodText;
@@ -71,8 +70,7 @@ namespace QuanAnNhat.ViewModels
             OrderBillNotes = null;
             StatusText = "Ordered";
 
-            BaseIconColor = Brushes.Black;
-            BaseTextColor = Brushes.White;
+            BaseIconColor = new SolidColorBrush(Color.FromRgb(66, 21, 13));
         }
 
         public void InitIconColor(int status)
