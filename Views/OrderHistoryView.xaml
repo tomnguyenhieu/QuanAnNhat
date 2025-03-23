@@ -196,8 +196,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="110" />
                 <RowDefinition Height="110" />
-                <RowDefinition Height="280" />
-                <RowDefinition Height="180" />
+                <RowDefinition Height="360" />
+                <RowDefinition Height="140" />
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Border
@@ -336,7 +336,7 @@
                                         </Grid.ColumnDefinitions>
                                         <StackPanel Orientation="Horizontal">
                                             <Label
-                                                Width="100"
+                                                Width="110"
                                                 Content="{Binding Dish.Price}"
                                                 FontFamily="Montserrat Alternates"
                                                 FontSize="24"

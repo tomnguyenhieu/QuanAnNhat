@@ -113,11 +113,11 @@ namespace QuanAnNhat.ViewModels
                 {
                     case "Ordered":
                         StatusText = text;
-                        _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 3).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
+                        _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 3).OrderByDescending(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
                         break;
                     case "Cancelled":
                         StatusText = text;
-                        _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 1).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
+                        _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 1).OrderByDescending(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
                         break;
                 }
                 foreach (var bill in _orderbills)
@@ -132,7 +132,7 @@ namespace QuanAnNhat.ViewModels
             GetBillDetails(new OrderBill());
         }
 
-        public async void GetBillDetails(OrderBill orderBill)
+        public void GetBillDetails(OrderBill orderBill)
         {
             OrderBillSubtotal = 0;
             OrderBillTotal = 0;
@@ -148,7 +148,7 @@ namespace QuanAnNhat.ViewModels
             Orders.Clear();
             using (var context = new QuanannhatContext())
             {
-                var res = await context.Orders.Where(o => o.OrderbillId == orderBill.Id).Include(d => d.Dish).ToListAsync();
+                var res =context.Orders.Where(o => o.OrderbillId == orderBill.Id).Include(d => d.Dish).ToList();
                 foreach (var order in res)
                 {
                     Orders.Add(order);
@@ -161,12 +161,13 @@ namespace QuanAnNhat.ViewModels
                 {
                     if (!IsDiscount)
                     {
-                        OrderBillSubtotal = order.Quantity * order.Dish.Price;
+                        OrderBillSubtotal += order.Quantity * order.Dish.Price;
                         OrderBillTotal = OrderBillSubtotal;
-                    } else
+                    }
+                    else
                     {
                         DiscountVouncher = orderBill.Discount;
-                        OrderBillSubtotal = order.Quantity * order.Dish.Price;
+                        OrderBillSubtotal += order.Quantity * order.Dish.Price;
                         OrderBillTotal = OrderBillSubtotal - DiscountVouncher.DiscountPrice;
                     }
                 }
