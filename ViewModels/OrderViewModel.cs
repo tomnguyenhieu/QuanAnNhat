@@ -141,17 +141,31 @@ namespace QuanAnNhat.ViewModels
 
         public void AddToCart(int dishId)
         {
-            
-            var dish = DataProvider.Ins.Context.Dishes.Where(x => x.Id == dishId).First();
-            if (!Cart.Contains(dish))
+            var dish = DataProvider.Ins.Context.Dishes.FirstOrDefault(x => x.Id == dishId);
+            using (var context = new QuanannhatContext())
             {
-                dish.Quantity = 1;
-                Cart.Add(dish);
-            }
-            else
-            {
-                dish.Quantity += 1;
-                dish.Price += dish.Price;
+                var availableDish = context.Dishes.Find(dishId);
+                if (availableDish != null && availableDish.Quantity > 0)
+                {
+                    var cartItem = Cart.FirstOrDefault(x => x.Id == dishId);
+                    if (cartItem == null)
+                    {
+                        dish.Quantity = 1;
+                        Cart.Add(dish);
+                        dish.Price += dish.Price;
+                    }
+                    else if (availableDish.Quantity > cartItem.Quantity)
+                    {
+                        cartItem.Quantity++;
+                        dish.Price += dish.Price;
+                    } else
+                    {
+                        MessageBox.Show("Số lượng có hạn!");
+                    }
+                } else
+                {
+                    MessageBox.Show("Đã hết món!");
+                }
             }
         }
 
@@ -179,30 +193,6 @@ namespace QuanAnNhat.ViewModels
                 MessageBox.Show("Vui lòng chọn món ăn!");
                 return false;
             }
-            List<Dish> _UnAvailableDishes = new List<Dish>();
-            using (var context = new QuanannhatContext())
-            {
-                foreach (var dish in Cart)
-                {
-                    foreach (var _dish in context.Dishes.ToList())
-                    {
-                        if (dish.Id == _dish.Id && _dish.Quantity == 0)
-                        {
-                            _UnAvailableDishes.Add(dish);
-                        }
-                    }
-                }
-            }
-            if (_UnAvailableDishes.Count > 0)
-            {
-                string _names = "";
-                foreach (var dish in _UnAvailableDishes)
-                {
-                    _names += $"{dish.Name}, ";
-                }
-                MessageBox.Show($"Hết món {_names}!");
-                return false;
-            }
             return true;
         }
 
@@ -215,7 +205,7 @@ namespace QuanAnNhat.ViewModels
                 int totalPrice = 0;
                 foreach (var dish in Cart)
                 {
-                    totalPrice += dish.Quantity * dish.Price;
+                    totalPrice += dish.Price;
                 }
                 OrderBill orderBill = new OrderBill()
                 {
@@ -236,64 +226,47 @@ namespace QuanAnNhat.ViewModels
         {
             using (var context = new QuanannhatContext())
             {
-                int _orderId = context.Orders.ToList().Count();
+                int _orderId = context.Orders.ToList().Count;
                 var res = context.Dishes.ToList();
                 foreach (var dish in Cart)
                 {
-                    foreach (var _dish in res)
+                    _orderId += 1;
+                    Order order = new Order()
                     {
-                        _orderId += 1;
-                        Order order = new Order()
-                        {
-                            Id = _orderId,
-                            DishId = dish.Id,
-                            Quantity = dish.Quantity,
-                            TotalPrice = dish.Quantity * dish.Price,
-                            OrderbillId = GetOrderBillIdByUserId(_UserId)
-                        };
-                        context.Orders.Add(order);
-                    }
+                        Id = _orderId,
+                        DishId = dish.Id,
+                        Quantity = dish.Quantity,
+                        TotalPrice = dish.Price,
+                        OrderbillId = context.OrderBills.Where(b => b.UserId == _UserId).OrderByDescending(o => o.Id).First().Id
+                    };
+                    context.Orders.Add(order);
                 }
                 context.SaveChanges();
             }
         }
 
-        public int GetOrderBillIdByUserId(int userId)
-        {
-            int orderBillId = 0;
-            foreach (var orderbill in DataProvider.Ins.Context.OrderBills.ToList())
-            {
-                if (orderbill.UserId == userId)
-                {
-                    orderBillId = orderbill.Id;
-                }
-            }
-            return orderBillId;
-        }
-
         public async void HandlePayment()
         {
-            int PaymentAmount = 0;
             string text = File.ReadAllText(@"D:\Learning\C#\HAU\QuanAnNhat\.config.json");
             config = JsonSerializer.Deserialize<Config>(text);
-
             payOS = new PayOS(config.ClientId, config.ApiKey, config.ChecksumKey);
-
             itemDatas = new List<ItemData>();
+
+            int PaymentAmount = 0;
             foreach (var dish in Cart)
             {
                 itemDatas.Add(new ItemData(dish.Name, dish.Quantity, dish.Price));
-            };
+                PaymentAmount += dish.Price;
+            }
+
+            Console.WriteLine(PaymentAmount);
 
             try
             {
-                foreach (ItemData item in itemDatas)
-                {
-                    PaymentAmount += item.price * item.quantity;
-                }
                 using (var context = new QuanannhatContext())
                 {
-                    orderCode = GetOrderBillIdByUserId(_UserId);
+                    orderCode = context.OrderBills.Where(b => b.UserId == _UserId).OrderByDescending(o => o.Id).First().Id;
+                    Console.WriteLine(orderCode);
                     paymentData = new PaymentData(orderCode, PaymentAmount, $"Thanh toan bill #{orderCode}", itemDatas, "http://localhost/", "http://localhost/");
 
                     CreatePaymentResult createPayment = await payOS.createPaymentLink(paymentData);
@@ -369,15 +342,26 @@ namespace QuanAnNhat.ViewModels
         [RelayCommand]
         public void ExcutePlus(object parameter)
         {
-            foreach (var dish in Cart)
+            using (var context = new QuanannhatContext())
             {
-                if (dish.Name.Equals(parameter))
+                foreach (var dish in Cart.ToList())
                 {
-                    dish.Quantity += 1;
-                    dish.Price += dish.Price;
+                    if (dish.Name.Equals(parameter))
+                    {
+                        var availableDish = context.Dishes.FirstOrDefault(x => x.Id == dish.Id);
+                        if (availableDish != null && availableDish.Quantity > dish.Quantity)
+                        {
+                            dish.Quantity++;
+                            dish.Price += dish.Price;
+                        } else
+                        {
+                            MessageBox.Show("Số lượng có giới hạn!");
+                        }
+                    }
                 }
             }
         }
+
         [RelayCommand]
         public void ExcuteMinus(object parameter)
         {
@@ -389,10 +373,11 @@ namespace QuanAnNhat.ViewModels
                     {
                         var res = context.Dishes.Where(d => d.Id == dish.Id).First();
                         dish.Quantity -= 1;
-                        dish.Price = res.Price * dish.Quantity;
+                        dish.Price -= res.Price;
                         if (dish.Quantity < 1)
                         {
                             Cart.Remove(dish);
+                            dish.Price = res.Price;
                         }
                     }
                 }

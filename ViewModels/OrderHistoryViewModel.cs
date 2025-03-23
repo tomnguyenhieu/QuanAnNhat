@@ -148,7 +148,7 @@ namespace QuanAnNhat.ViewModels
             Orders.Clear();
             using (var context = new QuanannhatContext())
             {
-                var res =context.Orders.Where(o => o.OrderbillId == orderBill.Id).Include(d => d.Dish).ToList();
+                var res = context.Orders.Where(o => o.OrderbillId == orderBill.Id).Include(d => d.Dish).ToList();
                 foreach (var order in res)
                 {
                     Orders.Add(order);
@@ -161,13 +161,13 @@ namespace QuanAnNhat.ViewModels
                 {
                     if (!IsDiscount)
                     {
-                        OrderBillSubtotal += order.Quantity * order.Dish.Price;
+                        OrderBillSubtotal += order.TotalPrice;
                         OrderBillTotal = OrderBillSubtotal;
                     }
                     else
                     {
                         DiscountVouncher = orderBill.Discount;
-                        OrderBillSubtotal += order.Quantity * order.Dish.Price;
+                        OrderBillSubtotal += order.TotalPrice;
                         OrderBillTotal = OrderBillSubtotal - DiscountVouncher.DiscountPrice;
                     }
                 }
