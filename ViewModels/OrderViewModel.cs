@@ -381,14 +381,19 @@ namespace QuanAnNhat.ViewModels
         [RelayCommand]
         public void ExcuteMinus(object parameter)
         {
-            foreach (var dish in Cart.ToList())
+            using (var context = new QuanannhatContext())
             {
-                if (dish.Name.Equals(parameter))
+                foreach (var dish in Cart.ToList())
                 {
-                    dish.Quantity -= 1;
-                    if (dish.Quantity < 1)
+                    if (dish.Name.Equals(parameter))
                     {
-                        Cart.Remove(dish);
+                        var res = context.Dishes.Where(d => d.Id == dish.Id).First();
+                        dish.Quantity -= 1;
+                        dish.Price = res.Price * dish.Quantity;
+                        if (dish.Quantity < 1)
+                        {
+                            Cart.Remove(dish);
+                        }
                     }
                 }
             }
