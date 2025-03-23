@@ -132,6 +132,45 @@ namespace QuanAnNhat.ViewModels
             GetBillDetails(new OrderBill());
         }
 
+        public async void GetFilterBills(bool isFilter)
+        {
+            OrderBills.Clear();
+            using (var context = new QuanannhatContext())
+            {
+                List<OrderBill> _orderbills = new List<OrderBill>();
+                switch (StatusText)
+                {
+                    case "Ordered":
+                        if (!isFilter)
+                        {
+                            _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 3).OrderByDescending(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
+                        } else
+                        {
+                            _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 3).OrderBy(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
+                        }
+                        break;
+                    case "Cancelled":
+                        if (!isFilter)
+                        {
+                            _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 1).OrderByDescending(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
+                        } else
+                        {
+                            _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 1).OrderBy(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
+                        }
+                        break;
+                }
+                foreach (var bill in _orderbills)
+                {
+                    OrderBills.Add(bill);
+                }
+            }
+
+            OrderBillId = 0;
+            OrderTableId = 0;
+            OrderBillNotes = null;
+            GetBillDetails(new OrderBill());
+        }
+
         public void GetBillDetails(OrderBill orderBill)
         {
             OrderBillSubtotal = 0;
@@ -191,6 +230,12 @@ namespace QuanAnNhat.ViewModels
                     }
                 }
             }
+        }
+
+        [RelayCommand]
+        public void ExecuteFilterHistory(object parameter)
+        {
+            GetFilterBills(Convert.ToBoolean(parameter.ToString()));
         }
 
         [RelayCommand]
