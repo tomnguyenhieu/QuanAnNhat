@@ -152,7 +152,6 @@ namespace QuanAnNhat.ViewModels
                     {
                         dish.Quantity = 1;
                         Cart.Add(dish);
-                        dish.Price += dish.Price;
                     }
                     else if (availableDish.Quantity > cartItem.Quantity)
                     {
