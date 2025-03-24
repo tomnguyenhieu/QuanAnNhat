@@ -18,20 +18,29 @@ namespace QuanAnNhat.ViewModels
     {
         public ObservableCollection<Dish> MustTryDishes { get; set; }
         public ObservableCollection<Dish> BestSellerDishes { get; set; }
+        public int _UserId { get; set; }
+
         public HomeViewModel()
         {
             MustTryDishes = new ObservableCollection<Dish>();
             BestSellerDishes = new ObservableCollection<Dish>();
 
-            GetMustTryDishes();
-            GetBestSellerDishes();
+            _UserId = 6;
+
+            _ = InitAsync();
         }
 
-        public async void GetMustTryDishes()
+        private async Task InitAsync()
+        {
+            await GetMustTryDishes();
+            await GetBestSellerDishes();
+        }
+
+        public async Task GetMustTryDishes()
         {
             using (var context = new QuanannhatContext())
             {
-                var tmpDishes =  await context.Dishes.Where(x => x.MustTry == 2).Where(x => x.Status == 2).ToListAsync();
+                var tmpDishes =  await context.Dishes.Where(x => x.MustTry == 2 && x.Status == 2).Include(x => x.Wishlists).ToListAsync();
                 int count = 1;
                 foreach (var _dish in tmpDishes)
                 {
@@ -44,11 +53,11 @@ namespace QuanAnNhat.ViewModels
             }
         }
 
-        public async void GetBestSellerDishes()
+        public async Task GetBestSellerDishes()
         {
             using (var context = new QuanannhatContext())
             {
-                var tmpDishes = await context.Dishes.OrderByDescending(x => x.TotalSold).ToListAsync();
+                var tmpDishes = await context.Dishes.OrderByDescending(x => x.TotalSold).Include(x => x.Wishlists).ToListAsync();
                 int count = 0;
                 foreach (var _dish in tmpDishes)
                 {

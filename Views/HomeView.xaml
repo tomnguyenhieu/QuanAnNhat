@@ -9,7 +9,7 @@
     d:DesignHeight="900"
     d:DesignWidth="1300"
     mc:Ignorable="d">
-    <Grid Margin="40,20,40,0">
+    <Grid x:Name="MainGrid" Margin="40,20,40,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="310" />
             <RowDefinition />
@@ -127,7 +127,7 @@
                                     <StackPanel Margin="10">
                                         <Border Height="120" CornerRadius="20">
                                             <Border.Background>
-                                                <ImageBrush ImageSource="/Assets/Images/dish1.jpg" Stretch="UniformToFill" />
+                                                <ImageBrush ImageSource="{Binding Id, Converter={StaticResource ThumbnailConverter}}" Stretch="UniformToFill" />
                                             </Border.Background>
                                             <Border.Effect>
                                                 <DropShadowEffect
@@ -197,7 +197,7 @@
                                     <StackPanel Margin="10">
                                         <Border Height="115" CornerRadius="20">
                                             <Border.Background>
-                                                <ImageBrush ImageSource="/Assets/Images/dish1.jpg" Stretch="UniformToFill" />
+                                                <ImageBrush ImageSource="{Binding Id, Converter={StaticResource ThumbnailConverter}}" Stretch="UniformToFill" />
                                             </Border.Background>
                                             <Border.Effect>
                                                 <DropShadowEffect
