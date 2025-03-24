@@ -38,6 +38,7 @@
             </DataTemplate>
 
             <converter:WishlistIconConverter x:Key="WishlistIconConverter" />
+            <converter:ThumbnailConverter x:Key="ThumbnailConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
