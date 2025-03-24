@@ -52,7 +52,7 @@ namespace QuanAnNhat.ViewModels
         public OrderHistoryViewModel()
         {
             Init();
-            GetOrderBills("Ordered");
+            _ = GetOrderBills("Ordered");
             LiveData();
         }
 
@@ -103,7 +103,7 @@ namespace QuanAnNhat.ViewModels
             }
         }
 
-        public async void GetOrderBills(string? text)
+        public async Task GetOrderBills(string? text)
         {
             OrderBills.Clear();
             using (var context = new QuanannhatContext())
@@ -132,7 +132,7 @@ namespace QuanAnNhat.ViewModels
             GetBillDetails(new OrderBill());
         }
 
-        public async void GetFilterBills(bool isFilter)
+        public async Task GetFilterBills(bool isFilter)
         {
             OrderBills.Clear();
             using (var context = new QuanannhatContext())
@@ -233,15 +233,15 @@ namespace QuanAnNhat.ViewModels
         }
 
         [RelayCommand]
-        public void ExecuteFilterHistory(object parameter)
+        public async Task ExecuteFilterHistory(object parameter)
         {
-            GetFilterBills(Convert.ToBoolean(parameter.ToString()));
+            await GetFilterBills(Convert.ToBoolean(parameter.ToString()));
         }
 
         [RelayCommand]
-        public void ExcuteGetOrderBills(object parameter)
+        public async Task ExcuteGetOrderBills(object parameter)
         {
-            GetOrderBills(parameter.ToString());
+            await GetOrderBills(parameter.ToString());
         }
 
         [RelayCommand]

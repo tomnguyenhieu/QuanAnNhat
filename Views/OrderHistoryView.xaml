@@ -121,7 +121,7 @@
                                                                 Height="120"
                                                                 CornerRadius="13">
                                                                 <Border.Background>
-                                                                    <ImageBrush ImageSource="/Assets/Images/dish1.jpg" Stretch="UniformToFill" />
+                                                                    <ImageBrush ImageSource="{Binding Dish.Id, Converter={StaticResource ThumbnailConverter}}" Stretch="UniformToFill" />
                                                                 </Border.Background>
                                                             </Border>
                                                             <Label
