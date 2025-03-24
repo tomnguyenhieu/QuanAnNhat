@@ -18,6 +18,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using Windows.UI.StartScreen;
 
 namespace QuanAnNhat.ViewModels
 {
@@ -66,14 +67,19 @@ namespace QuanAnNhat.ViewModels
             _UserId = 6;
             orderCode = 0;
 
-            GetDishlists();
-            GetMenu(2);
-            GetTables();
+            _ = InitAsync();
 
             LiveData();
         }
 
-        public async void GetDishlists()
+        private async Task InitAsync()
+        {
+            await GetDishlists();
+            await GetMenu(2);
+            await GetTables();
+        }
+
+        public async Task GetDishlists()
         {
             using (var context = new QuanannhatContext())
             {
@@ -85,35 +91,37 @@ namespace QuanAnNhat.ViewModels
             }
         }
 
-        public async void GetMenu(int filterStatus)
+        public async Task GetMenu(int filterStatus)
         {
             CategoryText = null;
             Dishes.Clear();
+
             using (var context = new QuanannhatContext())
             {
+                List<Dish> result;
                 switch (filterStatus)
                 {
                     case 1:
-                        var res1 = await context.Dishes.OrderBy(d => d.Price).Include(d => d.Wishlists).ToListAsync();
-                        foreach (var item in res1)
-                        {
-                            Dishes.Add(item);
-                        }
+                        result = await context.Dishes.OrderBy(d => d.Price).Include(d => d.Wishlists).ToListAsync();
                         IsFiltered = false;
                         break;
                     case 2:
-                        var res2 = await context.Dishes.OrderByDescending(d => d.Price).Include(d => d.Wishlists).ToListAsync();
-                        foreach (var item in res2)
-                        {
-                            Dishes.Add(item);
-                        }
+                        result = await context.Dishes
+                            .OrderByDescending(d => d.Price).Include(d => d.Wishlists).ToListAsync();
                         IsFiltered = true;
                         break;
+                    default:
+                        return;
+                }
+                foreach (var item in result)
+                {
+                    Dishes.Add(item);
                 }
             }
         }
 
-        public async void GetMenuByCategory(string? category)
+
+        public async Task GetMenuByCategory(string? category)
         {
             CategoryText = category;
             Dishes.Clear();
@@ -127,7 +135,7 @@ namespace QuanAnNhat.ViewModels
             }
         }
 
-        public async void SearchDishes(string? searchText)
+        public async Task SearchDishes(string? searchText)
         {
             Dishes.Clear();
             using (var context = new QuanannhatContext())
@@ -169,7 +177,7 @@ namespace QuanAnNhat.ViewModels
             }
         }
 
-        public async void GetTables()
+        public async Task GetTables()
         {
             using (var context = new QuanannhatContext())
             {
@@ -289,12 +297,13 @@ namespace QuanAnNhat.ViewModels
             Cart.Clear();
         }
 
-        public void AddToWishList(int dishId)
+        public async void AddToWishList(int dishId)
         {
             using (var context = new QuanannhatContext())
             {
                 var res = context.Wishlists.ToList();
-                var count = res.Count + 1;
+                int? count = res.Max(w => w.Id);
+                
                 bool check = true;
 
                 foreach (var item in res)
@@ -310,7 +319,7 @@ namespace QuanAnNhat.ViewModels
                 {
                     context.Wishlists.Add(new Wishlist()
                     {
-                        Id = count,
+                        Id = (int)count,
                         DishId = dishId,
                         UserId = _UserId
                     });
@@ -327,13 +336,13 @@ namespace QuanAnNhat.ViewModels
 
                 if (!string.IsNullOrEmpty(CategoryText))
                 {
-                    GetMenuByCategory(CategoryText);
+                    await GetMenuByCategory(CategoryText);
                 } else if (IsFiltered) 
                 {
-                    GetMenu(2);
+                    await GetMenu(2);
                 } else
                 {
-                    GetMenu(1);
+                    await GetMenu(1);
                 }
             }
         }
@@ -356,15 +365,15 @@ namespace QuanAnNhat.ViewModels
                             switch (paymentStatus)
                             {
                                 case "CANCELLED":
-                                    context.OrderBills.Where(b => b.Id == orderCode).ExecuteUpdate(u => u.SetProperty(b => b.BillStatus, 1));
+                                    await context.OrderBills.Where(b => b.Id == orderCode).ExecuteUpdateAsync(u => u.SetProperty(b => b.BillStatus, 1));
                                     MessageBox.Show("Hủy thanh toán thành công!");
                                     break;
                                 case "PAID":
-                                    context.OrderBills.Where(b => b.Id == orderCode).ExecuteUpdate(u => u.SetProperty(b => b.BillStatus, 3));
+                                    await context.OrderBills.Where(b => b.Id == orderCode).ExecuteUpdateAsync(u => u.SetProperty(b => b.BillStatus, 3));
                                     MessageBox.Show("Thanh toán thành công!");
                                     break;
                                 case "EXPIRED":
-                                    context.OrderBills.Where(b => b.Id == orderCode).ExecuteUpdate(u => u.SetProperty(b => b.BillStatus, 1));
+                                    await context.OrderBills.Where(b => b.Id == orderCode).ExecuteUpdateAsync(u => u.SetProperty(b => b.BillStatus, 1));
                                     MessageBox.Show("Hết hạn thanh toán!");
                                     break;
                             }

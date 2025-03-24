@@ -144,7 +144,7 @@
                                         <StackPanel Margin="10">
                                             <Border Height="115" CornerRadius="20">
                                                 <Border.Background>
-                                                    <ImageBrush ImageSource="/Assets/Images/dish1.jpg" Stretch="UniformToFill" />
+                                                    <ImageBrush ImageSource="{Binding Id, Converter={StaticResource ThumbnailConverter}}" Stretch="UniformToFill" />
                                                 </Border.Background>
                                                 <Border.Effect>
                                                     <DropShadowEffect
