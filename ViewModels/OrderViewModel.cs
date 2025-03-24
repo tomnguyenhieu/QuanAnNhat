@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FontAwesome.WPF;
 using Microsoft.EntityFrameworkCore;
 using Net.payOS;
 using Net.payOS.Types;
@@ -16,17 +17,27 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace QuanAnNhat.ViewModels
 {
     partial class OrderViewModel : ObservableObject
     {
-        private int _UserId = 6;
+        public int _UserId { get; set; }
         public ObservableCollection<Dishlist> Dishlists { get; set; }
         public ObservableCollection<Dish> Dishes { get; set; }
         public Dishlist Category { get; set; }
         public ObservableCollection<Dish> Cart { get; set; }
         public List<Table> Tables { get; set; }
+
+        [ObservableProperty]
+        private Table? _SelectedTable;
+        [ObservableProperty]
+        private string? _Notes;
+        [ObservableProperty]
+        private string? _CategoryText;
+        [ObservableProperty]
+        private bool _IsFiltered;
 
         private string? _SearchText;
         public string? SearchText
@@ -35,24 +46,8 @@ namespace QuanAnNhat.ViewModels
             set
             {
                 SetProperty(ref _SearchText, value);
-                SearchDishes(SearchText);
+                SearchDishes(_SearchText);
             }
-        }
-
-        private Table? _SelectedTable;
-        public Table? SelectedTable 
-        {
-            get => _SelectedTable;
-            set
-            {
-                SetProperty(ref _SelectedTable, value);
-            }
-        }
-        private string? _Notes;
-        public string? Notes
-        {
-            get => _Notes;
-            set => SetProperty(ref _Notes, value);
         }
 
         private PayOS payOS;
@@ -61,12 +56,14 @@ namespace QuanAnNhat.ViewModels
         private PaymentData paymentData;
         private int orderCode;
         private string? paymentStatus;
+
         public OrderViewModel()
         {
             Dishlists = new ObservableCollection<Dishlist>();
             Dishes = new ObservableCollection<Dish>();
             Cart = new ObservableCollection<Dish>();
             Tables = new List<Table>();
+            _UserId = 6;
             orderCode = 0;
 
             GetDishlists();
@@ -90,24 +87,27 @@ namespace QuanAnNhat.ViewModels
 
         public async void GetMenu(int filterStatus)
         {
+            CategoryText = null;
             Dishes.Clear();
             using (var context = new QuanannhatContext())
             {
                 switch (filterStatus)
                 {
                     case 1:
-                        var res1 = await context.Dishes.OrderBy(d => d.Price).ToListAsync();
+                        var res1 = await context.Dishes.OrderBy(d => d.Price).Include(d => d.Wishlists).ToListAsync();
                         foreach (var item in res1)
                         {
                             Dishes.Add(item);
                         }
+                        IsFiltered = false;
                         break;
                     case 2:
-                        var res2 = await context.Dishes.OrderByDescending(d => d.Price).ToListAsync();
+                        var res2 = await context.Dishes.OrderByDescending(d => d.Price).Include(d => d.Wishlists).ToListAsync();
                         foreach (var item in res2)
                         {
                             Dishes.Add(item);
                         }
+                        IsFiltered = true;
                         break;
                 }
             }
@@ -115,10 +115,11 @@ namespace QuanAnNhat.ViewModels
 
         public async void GetMenuByCategory(string? category)
         {
+            CategoryText = category;
             Dishes.Clear();
             using (var context = new QuanannhatContext())
             {
-                var res = await context.Dishes.Include(x => x.Dishlist).Where(x => x.Dishlist.Name == category && x.DishlistId == x.Dishlist.Id).ToListAsync();
+                var res = await context.Dishes.Include(x => x.Dishlist).Include(d => d.Wishlists).Where(x => x.Dishlist.Name == category && x.DishlistId == x.Dishlist.Id).ToListAsync();
                 foreach (var item in res)
                 {
                     Dishes.Add(item);
@@ -131,7 +132,7 @@ namespace QuanAnNhat.ViewModels
             Dishes.Clear();
             using (var context = new QuanannhatContext())
             {
-                var res = await context.Dishes.Where(x => x.Name.Contains(searchText)).ToListAsync();
+                var res = await context.Dishes.Where(x => x.Name.Contains(searchText)).Include(d => d.Wishlists).ToListAsync();
                 foreach (var item in res)
                 {
                     Dishes.Add(item);
@@ -144,8 +145,8 @@ namespace QuanAnNhat.ViewModels
             var dish = DataProvider.Ins.Context.Dishes.FirstOrDefault(x => x.Id == dishId);
             using (var context = new QuanannhatContext())
             {
-                var availableDish = context.Dishes.Find(dishId);
-                if (availableDish != null && availableDish.Quantity > 0)
+                var res = context.Dishes.Find(dishId);
+                if (res != null && res.Quantity > 0)
                 {
                     var cartItem = Cart.FirstOrDefault(x => x.Id == dishId);
                     if (cartItem == null)
@@ -153,10 +154,10 @@ namespace QuanAnNhat.ViewModels
                         dish.Quantity = 1;
                         Cart.Add(dish);
                     }
-                    else if (availableDish.Quantity > cartItem.Quantity)
+                    else if (res.Quantity > cartItem.Quantity)
                     {
                         cartItem.Quantity++;
-                        dish.Price += dish.Price;
+                        dish.Price += res.Price;
                     } else
                     {
                         MessageBox.Show("Số lượng có hạn!");
@@ -257,16 +258,17 @@ namespace QuanAnNhat.ViewModels
                 itemDatas.Add(new ItemData(dish.Name, dish.Quantity, dish.Price));
                 PaymentAmount += dish.Price;
             }
-
-            Console.WriteLine(PaymentAmount);
-
+            
             try
             {
                 using (var context = new QuanannhatContext())
                 {
                     orderCode = context.OrderBills.Where(b => b.UserId == _UserId).OrderByDescending(o => o.Id).First().Id;
                     Console.WriteLine(orderCode);
-                    paymentData = new PaymentData(orderCode, PaymentAmount, $"Thanh toan bill #{orderCode}", itemDatas, "http://localhost/", "http://localhost/");
+                    paymentData = new PaymentData(orderCode, PaymentAmount, $"Thanh toan bill #{orderCode}", itemDatas, "http://localhost/", "http://localhost/")
+                    {
+                        expiredAt = new DateTimeOffset(DateTime.UtcNow.AddMinutes(5)).ToUnixTimeSeconds()
+                    };
 
                     CreatePaymentResult createPayment = await payOS.createPaymentLink(paymentData);
                     ProcessStartInfo processStartInfo = new ProcessStartInfo()
@@ -287,13 +289,62 @@ namespace QuanAnNhat.ViewModels
             Cart.Clear();
         }
 
+        public void AddToWishList(int dishId)
+        {
+            using (var context = new QuanannhatContext())
+            {
+                var res = context.Wishlists.ToList();
+                var count = res.Count + 1;
+                bool check = true;
+
+                foreach (var item in res)
+                {
+                    if (item.DishId == dishId && item.UserId == _UserId)
+                    {
+                        check = false;
+                        break;
+                    }
+                }
+
+                if (check)
+                {
+                    context.Wishlists.Add(new Wishlist()
+                    {
+                        Id = count,
+                        DishId = dishId,
+                        UserId = _UserId
+                    });
+                }
+                else
+                {
+                    var wishlist = context.Wishlists.Where(w => w.DishId == dishId && w.UserId == _UserId).First();
+                    if (wishlist != null)
+                    {
+                        context.Wishlists.Remove(wishlist);
+                    }
+                }
+                context.SaveChanges();
+
+                if (!string.IsNullOrEmpty(CategoryText))
+                {
+                    GetMenuByCategory(CategoryText);
+                } else if (IsFiltered) 
+                {
+                    GetMenu(2);
+                } else
+                {
+                    GetMenu(1);
+                }
+            }
+        }
+
         public async void LiveData()
         {
             while (true)
             {
-                await Task.Delay(5000);
                 using (var context = new QuanannhatContext())
                 {
+                    await Task.Delay(5000);
                     if (orderCode != 0)
                     {
                         PaymentLinkInformation information = await payOS.getPaymentLinkInformation(orderCode);
@@ -312,6 +363,10 @@ namespace QuanAnNhat.ViewModels
                                     context.OrderBills.Where(b => b.Id == orderCode).ExecuteUpdate(u => u.SetProperty(b => b.BillStatus, 3));
                                     MessageBox.Show("Thanh toán thành công!");
                                     break;
+                                case "EXPIRED":
+                                    context.OrderBills.Where(b => b.Id == orderCode).ExecuteUpdate(u => u.SetProperty(b => b.BillStatus, 1));
+                                    MessageBox.Show("Hết hạn thanh toán!");
+                                    break;
                             }
                         }
                     }
@@ -324,6 +379,12 @@ namespace QuanAnNhat.ViewModels
         {
             int filterStatus = Convert.ToBoolean(parameter) ? 1 : 2;
             GetMenu(filterStatus);
+        }
+
+        [RelayCommand]
+        public void ExecuteAddToWishlist(object parameter)
+        {
+            AddToWishList((int)parameter);
         }
 
         [RelayCommand]
@@ -347,11 +408,11 @@ namespace QuanAnNhat.ViewModels
                 {
                     if (dish.Name.Equals(parameter))
                     {
-                        var availableDish = context.Dishes.FirstOrDefault(x => x.Id == dish.Id);
-                        if (availableDish != null && availableDish.Quantity > dish.Quantity)
+                        var res = context.Dishes.FirstOrDefault(x => x.Id == dish.Id);
+                        if (res != null && res.Quantity > dish.Quantity)
                         {
                             dish.Quantity++;
-                            dish.Price += dish.Price;
+                            dish.Price += res.Price;
                         } else
                         {
                             MessageBox.Show("Số lượng có giới hạn!");

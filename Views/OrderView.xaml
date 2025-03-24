@@ -10,7 +10,10 @@
     d:DesignHeight="900"
     d:DesignWidth="1300"
     mc:Ignorable="d">
-    <Grid>
+    <UserControl.Resources>
+        <viewmodels:OrderViewModel x:Key="OrderVM" />
+    </UserControl.Resources>
+    <Grid x:Name="MainGrid" DataContext="{StaticResource OrderVM}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="800" />
             <ColumnDefinition />
@@ -66,10 +69,9 @@
                             x:Name="FilterBtn"
                             Grid.Column="2"
                             Background="Transparent"
-                            BorderThickness="0"
                             Command="{Binding ExecuteFilterCommand}"
                             CommandParameter="{Binding IsChecked, ElementName=FilterBtn}"
-                            Cursor="Hand">
+                            Style="{StaticResource ToggleButtonTheme}">
                             <fa:FontAwesome
                                 VerticalAlignment="Center"
                                 FontSize="34"
@@ -138,69 +140,83 @@
                                             ShadowDepth="1"
                                             Color="Black" />
                                     </Border.Effect>
-                                    <StackPanel Margin="10">
-                                        <Border Height="115" CornerRadius="20">
-                                            <Border.Background>
-                                                <ImageBrush ImageSource="/Assets/Images/dish1.jpg" Stretch="UniformToFill" />
-                                            </Border.Background>
-                                            <Border.Effect>
-                                                <DropShadowEffect
-                                                    BlurRadius="10"
-                                                    Direction="270"
-                                                    Opacity="0.4"
-                                                    ShadowDepth="1"
-                                                    Color="Black" />
-                                            </Border.Effect>
-                                        </Border>
-                                        <StackPanel Margin="12,8,0,0">
-                                            <TextBlock
-                                                FontFamily="Montserrat Alternates"
-                                                FontSize="20"
-                                                FontWeight="SemiBold"
-                                                Foreground="#F5EFDF"
-                                                Text="{Binding Name}" />
-                                            <TextBlock
-                                                FontFamily="Montserrat Alternates"
-                                                FontSize="11"
-                                                Foreground="#F5EFDF"
-                                                Text="{Binding Description}" />
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition />
-                                                    <ColumnDefinition Width="50" />
-                                                </Grid.ColumnDefinitions>
+                                    <Grid>
+                                        <StackPanel Margin="10">
+                                            <Border Height="115" CornerRadius="20">
+                                                <Border.Background>
+                                                    <ImageBrush ImageSource="/Assets/Images/dish1.jpg" Stretch="UniformToFill" />
+                                                </Border.Background>
+                                                <Border.Effect>
+                                                    <DropShadowEffect
+                                                        BlurRadius="10"
+                                                        Direction="270"
+                                                        Opacity="0.4"
+                                                        ShadowDepth="1"
+                                                        Color="Black" />
+                                                </Border.Effect>
+                                            </Border>
+                                            <StackPanel Margin="12,8,0,0">
                                                 <TextBlock
-                                                    HorizontalAlignment="Left"
                                                     FontFamily="Montserrat Alternates"
-                                                    FontSize="34"
+                                                    FontSize="20"
                                                     FontWeight="SemiBold"
-                                                    Foreground="#42150D"
-                                                    Text="{Binding Price}" />
-                                                <Border Grid.Column="1">
-                                                    <Border.Style>
-                                                        <Style>
-                                                            <Style.Triggers>
-                                                                <Trigger Property="Border.IsMouseOver" Value="True">
-                                                                    <Setter Property="Border.Opacity" Value="0.8" />
-                                                                </Trigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </Border.Style>
-                                                    <Border.InputBindings>
-                                                        <MouseBinding
-                                                            Command="{Binding DataContext.ExcuteAddToCartCommand, ElementName=MenuItemControl}"
-                                                            CommandParameter="{Binding Id}"
-                                                            MouseAction="LeftClick" />
-                                                    </Border.InputBindings>
-                                                    <fa:FontAwesome
-                                                        Cursor="Hand"
-                                                        FontSize="40"
-                                                        Foreground="White"
-                                                        Icon="PlusCircle" />
-                                                </Border>
-                                            </Grid>
+                                                    Foreground="#F5EFDF"
+                                                    Text="{Binding Name}" />
+                                                <TextBlock
+                                                    FontFamily="Montserrat Alternates"
+                                                    FontSize="11"
+                                                    Foreground="#F5EFDF"
+                                                    Text="{Binding Description}" />
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition Width="50" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                                        HorizontalAlignment="Left"
+                                                        FontFamily="Montserrat Alternates"
+                                                        FontSize="34"
+                                                        FontWeight="SemiBold"
+                                                        Foreground="#42150D"
+                                                        Text="{Binding Price}" />
+                                                    <Border Grid.Column="1">
+                                                        <Border.Style>
+                                                            <Style>
+                                                                <Style.Triggers>
+                                                                    <Trigger Property="Border.IsMouseOver" Value="True">
+                                                                        <Setter Property="Border.Opacity" Value="0.8" />
+                                                                    </Trigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Border.Style>
+                                                        <Border.InputBindings>
+                                                            <MouseBinding
+                                                                Command="{Binding DataContext.ExcuteAddToCartCommand, ElementName=MenuItemControl}"
+                                                                CommandParameter="{Binding Id}"
+                                                                MouseAction="LeftClick" />
+                                                        </Border.InputBindings>
+                                                        <fa:FontAwesome
+                                                            Cursor="Hand"
+                                                            FontSize="40"
+                                                            Foreground="White"
+                                                            Icon="PlusCircle" />
+                                                    </Border>
+                                                </Grid>
+                                            </StackPanel>
                                         </StackPanel>
-                                    </StackPanel>
+                                        <ToggleButton
+                                            Command="{Binding DataContext.ExecuteAddToWishlistCommand, ElementName=MainGrid}"
+                                            CommandParameter="{Binding Id}"
+                                            Style="{StaticResource WishlistTheme}">
+                                            <ToggleButton.FontFamily>
+                                                <MultiBinding Converter="{StaticResource WishlistIconConverter}">
+                                                    <Binding Path="Id" />
+                                                    <Binding ElementName="MainGrid" Path="DataContext._UserId" />
+                                                    <Binding Path="Wishlists" />
+                                                </MultiBinding>
+                                            </ToggleButton.FontFamily>
+                                        </ToggleButton>
+                                    </Grid>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

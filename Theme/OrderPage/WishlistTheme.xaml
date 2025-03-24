@@ -8,27 +8,25 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ToggleButton">
                         <Border
-                            Background="{TemplateBinding Background}"
+                            Margin="26"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
                             BorderThickness="0"
-                            CornerRadius="15"
                             Cursor="Hand">
                             <Grid>
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                <fa:FontAwesome
-                                    x:Name="Icon"
-                                    FontSize="32"
-                                    Foreground="#F5D5C2"
-                                    Icon="HeartOutline" />
+                                <ContentPresenter
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="{TemplateBinding Content}" />
                             </Grid>
                         </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="Icon" Property="Icon" Value="Heart" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Setter Property="FontSize" Value="26" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Content" Value="&#xf004;" />
+            <Setter Property="Foreground" Value="#F5EFDF" />
         </Style.Setters>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
