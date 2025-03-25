@@ -18,14 +18,11 @@ namespace QuanAnNhat.ViewModels
     {
         public ObservableCollection<Dish> MustTryDishes { get; set; }
         public ObservableCollection<Dish> BestSellerDishes { get; set; }
-        public int _UserId { get; set; }
-
+        
         public HomeViewModel()
         {
             MustTryDishes = new ObservableCollection<Dish>();
             BestSellerDishes = new ObservableCollection<Dish>();
-
-            _UserId = 6;
 
             _ = InitAsync();
         }

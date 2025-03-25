@@ -60,13 +60,15 @@ namespace QuanAnNhat.ViewModels
         private int orderCode;
         private string? paymentStatus;
 
-        public OrderViewModel()
+        public OrderViewModel(string? userid)
         {
+            Console.WriteLine($"Order: {userid}");
             Dishlists = new ObservableCollection<Dishlist>();
             Dishes = new ObservableCollection<Dish>();
             Cart = new ObservableCollection<Dish>();
             Tables = new List<Table>();
-            _UserId = 6;
+
+            _UserId = Convert.ToInt32(userid);
             orderCode = 0;
 
             _ = Loading(2, false);

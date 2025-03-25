@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using QuanAnNhat.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,16 @@ namespace QuanAnNhat.ViewModels
     {
         [ObservableProperty]
         private object? _SelectedViewModel;
+        [ObservableProperty]
+        private string? _UserId;
+        private AccessWindow accessWindow;
+        private bool IsLogin = false;
 
         public MainViewModel()
         {
-            SelectedViewModel = new HomeViewModel();
+            accessWindow = new AccessWindow();
+            accessWindow.DataContext = this;
+            accessWindow.ShowDialog();
         }
 
         [RelayCommand]
@@ -27,11 +34,23 @@ namespace QuanAnNhat.ViewModels
                     SelectedViewModel = new HomeViewModel();
                     break;
                 case "Order":
-                    SelectedViewModel = new OrderViewModel();
+                    SelectedViewModel = new OrderViewModel(UserId);
                     break;
                 case "Order History":
-                    SelectedViewModel = new OrderHistoryViewModel();
+                    SelectedViewModel = new OrderHistoryViewModel(UserId);
                     break;
+            }
+        }
+
+        [RelayCommand]
+        public void ExecuteClick(object parameter)
+        {
+            Console.WriteLine($"Login: {UserId}");
+            accessWindow.Close();
+            IsLogin = true;
+            if (IsLogin)
+            {
+                SelectedViewModel = new HomeViewModel();
             }
         }
     }

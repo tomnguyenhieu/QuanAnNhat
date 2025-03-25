@@ -10,10 +10,7 @@
     d:DesignHeight="900"
     d:DesignWidth="1300"
     mc:Ignorable="d">
-    <UserControl.Resources>
-        <viewmodels:OrderViewModel x:Key="OrderVM" />
-    </UserControl.Resources>
-    <Grid x:Name="MainGrid" DataContext="{StaticResource OrderVM}">
+    <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="800" />
             <ColumnDefinition />
@@ -253,7 +250,10 @@
                                             <ToggleButton.FontFamily>
                                                 <MultiBinding Converter="{StaticResource WishlistIconConverter}">
                                                     <Binding Path="Id" />
-                                                    <Binding ElementName="MainGrid" Path="DataContext._UserId" />
+                                                    <Binding
+                                                        ElementName="MainGrid"
+                                                        FallbackValue="-1"
+                                                        Path="DataContext._UserId" />
                                                     <Binding Path="Wishlists" />
                                                 </MultiBinding>
                                             </ToggleButton.FontFamily>

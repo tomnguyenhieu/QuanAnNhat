@@ -23,6 +23,7 @@ namespace QuanAnNhat.ViewModels
         private bool IsDiscount = false;
         private string? StatusText;
         private Brush BaseIconColor;
+        public int _UserId { get; set; }
 
         [ObservableProperty]
         private string? _PaymentMethodText;
@@ -48,12 +49,34 @@ namespace QuanAnNhat.ViewModels
         private Brush _Arrow1;
         [ObservableProperty]
         private Brush _Arrow2;
+        [ObservableProperty]
+        private Visibility _IsVisible;
 
-        public OrderHistoryViewModel()
+        public OrderHistoryViewModel(string? userId)
         {
+            Console.WriteLine($"OrderHistory: {userId}");
+
+            _UserId = Convert.ToInt32(userId);
             Init();
-            _ = GetOrderBills("Ordered");
+
+            _ = Loading("Ordered", false);
+
             LiveData();
+        }
+
+        public async Task Loading(string? text, bool isfilter)
+        {
+            IsVisible = Visibility.Visible;
+
+            if (isfilter)
+            {
+                await GetFilterBills(isfilter);
+            } else
+            {
+                await GetOrderBills(text);
+            }
+
+            IsVisible = Visibility.Hidden;
         }
 
         public void Init()
@@ -108,16 +131,17 @@ namespace QuanAnNhat.ViewModels
             OrderBills.Clear();
             using (var context = new QuanannhatContext())
             {
+                await Task.Delay(1000);
                 List<OrderBill> _orderbills = new List<OrderBill>();
                 switch (text)
                 {
                     case "Ordered":
                         StatusText = text;
-                        _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 3).OrderByDescending(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
+                        _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 3 && ob.UserId == _UserId).OrderByDescending(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
                         break;
                     case "Cancelled":
                         StatusText = text;
-                        _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 1).OrderByDescending(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
+                        _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 1 && ob.UserId == _UserId).OrderByDescending(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
                         break;
                 }
                 foreach (var bill in _orderbills)
@@ -137,25 +161,26 @@ namespace QuanAnNhat.ViewModels
             OrderBills.Clear();
             using (var context = new QuanannhatContext())
             {
+                await Task.Delay(1000);
                 List<OrderBill> _orderbills = new List<OrderBill>();
                 switch (StatusText)
                 {
                     case "Ordered":
                         if (!isFilter)
                         {
-                            _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 3).OrderByDescending(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
+                            _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 3 && ob.UserId == _UserId).OrderByDescending(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
                         } else
                         {
-                            _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 3).OrderBy(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
+                            _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 3 && ob.UserId == _UserId).OrderBy(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
                         }
                         break;
                     case "Cancelled":
                         if (!isFilter)
                         {
-                            _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 1).OrderByDescending(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
+                            _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 1 && ob.UserId == _UserId).OrderByDescending(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
                         } else
                         {
-                            _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 1).OrderBy(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
+                            _orderbills = await context.OrderBills.Where(ob => ob.BillStatus == 1 && ob.UserId == _UserId).OrderBy(o => o.Id).Include(ob => ob.Orders).ThenInclude(o => o.Dish).ToListAsync();
                         }
                         break;
                 }
@@ -187,7 +212,7 @@ namespace QuanAnNhat.ViewModels
             Orders.Clear();
             using (var context = new QuanannhatContext())
             {
-                var res = context.Orders.Where(o => o.OrderbillId == orderBill.Id).Include(d => d.Dish).ToList();
+                var res = context.Orders.Where(o => o.OrderbillId == orderBill.Id && orderBill.UserId == _UserId).Include(d => d.Dish).ToList();
                 foreach (var order in res)
                 {
                     Orders.Add(order);
@@ -222,7 +247,7 @@ namespace QuanAnNhat.ViewModels
                 {
                     if (OrderBillId != 0 && StatusText.Equals("Ordered"))
                     {
-                        var res = await context.OrderBills.Where(b => b.Id == OrderBillId).FirstAsync();
+                        var res = await context.OrderBills.Where(b => b.Id == OrderBillId && b.UserId == _UserId).FirstAsync();
                         InitIconColor(Convert.ToInt32(res.OrderStatus));
                     } else
                     {
@@ -235,13 +260,13 @@ namespace QuanAnNhat.ViewModels
         [RelayCommand]
         public async Task ExecuteFilterHistory(object parameter)
         {
-            await GetFilterBills(Convert.ToBoolean(parameter.ToString()));
+            await Loading(StatusText, Convert.ToBoolean(parameter.ToString()));
         }
 
         [RelayCommand]
         public async Task ExcuteGetOrderBills(object parameter)
         {
-            await GetOrderBills(parameter.ToString());
+            await Loading(parameter.ToString(), false);
         }
 
         [RelayCommand]

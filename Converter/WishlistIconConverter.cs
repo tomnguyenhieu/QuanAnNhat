@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
+using SystemConvert = System.Convert;
 
 namespace QuanAnNhat.Converter
 {
@@ -12,9 +13,20 @@ namespace QuanAnNhat.Converter
             FontFamily fontRegular = new FontFamily("Font Awesome 6 Free Regular");
             FontFamily fontSolid = new FontFamily("Font Awesome 6 Free Solid");
 
+            int dishId = SystemConvert.ToInt32(values[0]);
+            int userId;
+            if (values[1] is int id)
+            {
+                userId = id;
+            }
+            else
+            {
+                return fontRegular;
+            }
+
             foreach (var item in (List<Wishlist>)values[2])
             {
-                if (item.DishId == (int)values[0] && item.UserId == (int)values[1])
+                if (item.DishId == dishId && item.UserId == userId)
                 {
                     return fontSolid;
                 }
