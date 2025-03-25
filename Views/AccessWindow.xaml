@@ -104,6 +104,14 @@
                     Background="#CB6E59"
                     CornerRadius="20"
                     Cursor="Hand">
+                    <Border.Effect>
+                        <DropShadowEffect
+                            BlurRadius="10"
+                            Direction="270"
+                            Opacity="0.4"
+                            ShadowDepth="1"
+                            Color="Black" />
+                    </Border.Effect>
                     <Border.InputBindings>
                         <MouseBinding
                             Command="{Binding ExecuteRegisterCommand}"
@@ -187,6 +195,14 @@
                     Background="#CB6E59"
                     CornerRadius="20"
                     Cursor="Hand">
+                    <Border.Effect>
+                        <DropShadowEffect
+                            BlurRadius="10"
+                            Direction="270"
+                            Opacity="0.4"
+                            ShadowDepth="1"
+                            Color="Black" />
+                    </Border.Effect>
                     <Border.InputBindings>
                         <MouseBinding Command="{Binding ExecuteLoginCommand}" MouseAction="LeftClick" />
                     </Border.InputBindings>
