@@ -12,6 +12,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using MimeKit;
+using MailKit.Net.Smtp;
 
 namespace QuanAnNhat.ViewModels
 {
@@ -23,6 +25,7 @@ namespace QuanAnNhat.ViewModels
         private string? _UserId;
         [ObservableProperty]
         private Visibility _IsVisible;
+        private string? GenerateCode;
 
         private string? _Email;
         public string? Email
@@ -45,7 +48,15 @@ namespace QuanAnNhat.ViewModels
             set => SetProperty(ref _RePassword, value);
         }
 
+        private string? _AuthCode;
+        public string? AuthCode
+        {
+            get => _AuthCode;
+            set => SetProperty(ref _AuthCode, value);
+        }
+
         private AccessWindow AccessWindow;
+        private AuthWindow AuthWindow;
 
         public MainViewModel()
         {
@@ -84,6 +95,47 @@ namespace QuanAnNhat.ViewModels
             return false;
         }
 
+        public bool CheckAuthenticate()
+        {
+            using (var context = new QuanannhatContext())
+            {
+                var users = context.Users.ToList();
+                foreach (var user in users)
+                {
+                    if (user.Email.Contains(Email) && user.Status == 2)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public void HandleLogin()
+        {
+            if (CheckLogin())
+            {
+                if (!CheckAuthenticate())
+                {
+                    MessageBox.Show("Tài khoản chưa xác thực, vui lòng xác thực!");
+                    AccessWindow.Close();
+                    AuthWindow = new AuthWindow();
+                    AuthWindow.DataContext = this;
+                    AuthWindow.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("Đăng nhập thành công!");
+                    AccessWindow.Close();
+                    SelectedViewModel = new HomeViewModel();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng kiểm tra lại thông tin đăng nhập!");
+            }
+        }
+
         public bool RegisterValidate()
         {
             using (var context = new QuanannhatContext())
@@ -108,6 +160,11 @@ namespace QuanAnNhat.ViewModels
         {
             using (var context = new QuanannhatContext())
             {
+                var info = new Information()
+                {
+                    Id = context.Informations.ToList().Count + 1
+                };
+                context.Informations.Add(info);
                 var user = new User()
                 {
                     Id = context.Users.ToList().Count + 1,
@@ -116,10 +173,34 @@ namespace QuanAnNhat.ViewModels
                     Status = 1,
                     Role = 3,
                     Score = 0,
-                    TotalScore = 0
+                    TotalScore = 0,
+                    InformationId = info.Id
                 };
                 context.Users.Add(user);
                 context.SaveChanges();
+            }
+        }
+
+        public void SendGenerateCode()
+        {
+            MailboxAddress MailAddressFrom = new MailboxAddress("Sakuramen", "tomnguyenhieu2004@gmail.com");
+            MailboxAddress MailAddressTo = new MailboxAddress("User", $"{Email}");
+
+            var message = new MimeMessage();
+            message.From.Add(MailAddressFrom);
+            message.To.Add(MailAddressTo);
+            message.Subject = "Test sending mail from C#";
+            message.Body = new TextPart("plain")
+            {
+                Text = $"Ma xac thuc cua ban la: {GenerateCode}"
+            };
+
+            using (var client = new SmtpClient())
+            {
+                client.Connect("smtp.gmail.com", 587, false);
+                client.Authenticate("tomnguyenhieu2004@gmail.com", "hryd ptlm ryey rgim");
+                client.Send(message);
+                client.Disconnect(true);
             }
         }
 
@@ -149,16 +230,7 @@ namespace QuanAnNhat.ViewModels
         [RelayCommand]
         public void ExecuteLogin()
         {
-            if (CheckLogin())
-            {
-                MessageBox.Show("Đăng nhập thành công!");
-                AccessWindow.Close();
-                
-            }
-            else
-            {
-                MessageBox.Show("Vui lòng kiểm tra lại thông tin đăng nhập!");
-            }
+            HandleLogin();
         }
 
         [RelayCommand]
@@ -174,6 +246,40 @@ namespace QuanAnNhat.ViewModels
             else
             {
                 MessageBox.Show("Vui lòng kiểm tra lại thông tin đăng ký!");
+            }
+        }
+
+        [RelayCommand]
+        public void ExecuteSendCode()
+        {
+            Random random = new Random();
+            GenerateCode = $"{random.Next(9)}{random.Next(9)}{random.Next(9)}{random.Next(9)}";
+
+            Console.WriteLine(GenerateCode);
+
+            SendGenerateCode();
+            MessageBox.Show("Vui lòng kiểm tra Gmail!");
+        }
+
+        [RelayCommand]
+        public void ExecuteAuth()
+        {
+            if (AuthCode.Equals(GenerateCode))
+            {
+                using (var context = new QuanannhatContext())
+                {
+                    var res = context.Users.Where(u => u.Id == (Convert.ToInt32(UserId))).First();
+                    res.Status = 2;
+
+                    context.SaveChanges();
+                }
+                MessageBox.Show("Xác thực thành công!");
+                AuthWindow.Close();
+                SelectedViewModel = new HomeViewModel();
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng kiểm tra lại!");
             }
         }
     }
