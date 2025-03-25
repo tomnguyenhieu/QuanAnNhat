@@ -347,7 +347,7 @@
                     </ComboBox>
                 </Grid>
             </Grid>
-            <Grid Grid.Row="1" Margin="20,20,20,0">
+            <Grid Grid.Row="1" Margin="20,20,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50" />
                     <RowDefinition />
@@ -462,6 +462,7 @@
                                                 </Grid>
                                                 <TextBlock
                                                     Grid.Column="1"
+                                                    Margin="0,0,6,0"
                                                     HorizontalAlignment="Right"
                                                     FontFamily="Montserrat Alternates SemiBold"
                                                     FontSize="30"
