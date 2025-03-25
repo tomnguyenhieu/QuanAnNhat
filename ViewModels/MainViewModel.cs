@@ -181,8 +181,9 @@ namespace QuanAnNhat.ViewModels
             }
         }
 
-        public void SendGenerateCode()
+        public async Task SendGenerateCode()
         {
+            await Task.Delay(3000);
             MailboxAddress MailAddressFrom = new MailboxAddress("Sakuramen", "tomnguyenhieu2004@gmail.com");
             MailboxAddress MailAddressTo = new MailboxAddress("User", $"{Email}");
 
@@ -250,14 +251,14 @@ namespace QuanAnNhat.ViewModels
         }
 
         [RelayCommand]
-        public void ExecuteSendCode()
+        public async Task ExecuteSendCode()
         {
             Random random = new Random();
             GenerateCode = $"{random.Next(9)}{random.Next(9)}{random.Next(9)}{random.Next(9)}";
 
             Console.WriteLine(GenerateCode);
 
-            SendGenerateCode();
+            await SendGenerateCode();
             MessageBox.Show("Vui lòng kiểm tra Gmail!");
         }
 
