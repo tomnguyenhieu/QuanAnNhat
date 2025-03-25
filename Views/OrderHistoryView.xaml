@@ -40,6 +40,7 @@
                             Command="{Binding ExcuteGetOrderBillsCommand}"
                             CommandParameter="{Binding Content, ElementName=OrderedBtn}"
                             Content="Ordered"
+                            FontFamily="Montserrat Alternates SemiBold"
                             IsChecked="True"
                             Style="{StaticResource CategoryTheme}" />
                         <RadioButton
@@ -47,6 +48,7 @@
                             Command="{Binding ExcuteGetOrderBillsCommand}"
                             CommandParameter="{Binding Content, ElementName=CancelledBtn}"
                             Content="Cancelled"
+                            FontFamily="Montserrat Alternates SemiBold"
                             Style="{StaticResource CategoryTheme}" />
                     </StackPanel>
                     <ToggleButton
