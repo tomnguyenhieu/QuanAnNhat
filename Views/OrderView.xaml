@@ -90,52 +90,71 @@
                     Margin="20,0,20,0"
                     Content="Categories"
                     Style="{StaticResource LabelTheme}" />
-                <ScrollViewer
-                    Grid.Row="1"
-                    Margin="20,0,20,0"
-                    HorizontalScrollBarVisibility="Auto"
-                    VerticalScrollBarVisibility="Disabled">
-                    <StackPanel Orientation="Horizontal">
-                        <RadioButton
-                            x:Name="WishlistBtn"
-                            Command="{Binding ExcuteGetMenuCommand}"
-                            CommandParameter="{Binding Content, ElementName=WishlistBtn}"
-                            Content="Wishlist"
-                            GroupName="CategoryRadioButton"
-                            Style="{StaticResource CategoryTheme}" />
-                        <RadioButton
-                            x:Name="BestSellerBtn"
-                            Command="{Binding ExcuteGetMenuCommand}"
-                            CommandParameter="{Binding Content, ElementName=BestSellerBtn}"
-                            Content="Best Seller"
-                            GroupName="CategoryRadioButton"
-                            Style="{StaticResource CategoryTheme}" />
-                        <RadioButton
-                            x:Name="MustTryBtn"
-                            Command="{Binding ExcuteGetMenuCommand}"
-                            CommandParameter="{Binding Content, ElementName=MustTryBtn}"
-                            Content="Must Try"
-                            GroupName="CategoryRadioButton"
-                            Style="{StaticResource CategoryTheme}" />
-                        <ItemsControl x:Name="CategoriesItemControl" ItemsSource="{Binding Dishlists}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <RadioButton
-                                        Command="{Binding DataContext.ExcuteGetMenuCommand, ElementName=CategoriesItemControl}"
-                                        CommandParameter="{Binding Name}"
-                                        Content="{Binding Name}"
-                                        GroupName="CategoryRadioButton"
-                                        Style="{StaticResource CategoryTheme}" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </StackPanel>
-                </ScrollViewer>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="121" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <RadioButton
+                        x:Name="ResetBtn"
+                        Margin="21,2,0,0"
+                        VerticalAlignment="Top"
+                        Command="{Binding ExcuteResetGetMenuCommand}"
+                        Content="&#xf0e2;"
+                        FontFamily="Font Awesome 6 Free Solid"
+                        GroupName="CategoryRadioButton"
+                        Style="{StaticResource CategoryTheme}" />
+                    <ScrollViewer
+                        Grid.Column="1"
+                        Margin="20,0,20,0"
+                        HorizontalScrollBarVisibility="Auto"
+                        VerticalScrollBarVisibility="Disabled">
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton
+                                x:Name="WishlistBtn"
+                                Command="{Binding ExcuteGetMenuCommand}"
+                                CommandParameter="{Binding Content, ElementName=WishlistBtn}"
+                                Content="Wishlist"
+                                FontFamily="Montserrat Alternates SemiBold"
+                                GroupName="CategoryRadioButton"
+                                Style="{StaticResource CategoryTheme}" />
+                            <RadioButton
+                                x:Name="BestSellerBtn"
+                                Command="{Binding ExcuteGetMenuCommand}"
+                                CommandParameter="{Binding Content, ElementName=BestSellerBtn}"
+                                Content="Best Seller"
+                                FontFamily="Montserrat Alternates SemiBold"
+                                GroupName="CategoryRadioButton"
+                                Style="{StaticResource CategoryTheme}" />
+                            <RadioButton
+                                x:Name="MustTryBtn"
+                                Command="{Binding ExcuteGetMenuCommand}"
+                                CommandParameter="{Binding Content, ElementName=MustTryBtn}"
+                                Content="Must Try"
+                                FontFamily="Montserrat Alternates SemiBold"
+                                GroupName="CategoryRadioButton"
+                                Style="{StaticResource CategoryTheme}" />
+                            <ItemsControl x:Name="CategoriesItemControl" ItemsSource="{Binding Dishlists}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <RadioButton
+                                            Command="{Binding DataContext.ExcuteGetMenuCommand, ElementName=CategoriesItemControl}"
+                                            CommandParameter="{Binding Name}"
+                                            Content="{Binding Name}"
+                                            FontFamily="Montserrat Alternates SemiBold"
+                                            GroupName="CategoryRadioButton"
+                                            Style="{StaticResource CategoryTheme}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
             </Grid>
             <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
@@ -167,7 +186,7 @@
                                         <StackPanel Margin="10">
                                             <Border Height="115" CornerRadius="20">
                                                 <Border.Background>
-                                                    <ImageBrush ImageSource="{Binding Id, Converter={StaticResource ThumbnailConverter}}" Stretch="UniformToFill" />
+                                                    <ImageBrush ImageSource="{Binding Id, Converter={StaticResource ResourceKey=ThumbnailConverter}}" Stretch="UniformToFill" />
                                                 </Border.Background>
                                                 <Border.Effect>
                                                     <DropShadowEffect
@@ -350,7 +369,7 @@
                                         </Grid.ColumnDefinitions>
                                         <Border Margin="16" CornerRadius="14">
                                             <Border.Background>
-                                                <ImageBrush ImageSource="/Assets/Images/dish1.jpg" Stretch="UniformToFill" />
+                                                <ImageBrush ImageSource="{Binding Id, Converter={StaticResource ThumbnailConverter}}" Stretch="UniformToFill" />
                                             </Border.Background>
                                         </Border>
                                         <Grid Grid.Column="1" Margin="10">

@@ -509,5 +509,11 @@ namespace QuanAnNhat.ViewModels
                 HandlePayment();
             }
         }
+
+        [RelayCommand]
+        public async Task ExcuteResetGetMenu()
+        {
+            await Loading(2, false);
+        }
     }
 }
