@@ -11,7 +11,7 @@
                             Width="50"
                             Height="50"
                             RenderTransformOrigin="0.5,0.5"
-                            Stroke="Black"
+                            Stroke="#BC4C33"
                             StrokeDashArray="10"
                             StrokeDashCap="Round"
                             StrokeThickness="10">
