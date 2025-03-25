@@ -2,6 +2,7 @@
     x:Class="QuanAnNhat.Views.AccessWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="clr-namespace:QuanAnNhat.Components"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:QuanAnNhat.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -13,25 +14,214 @@
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
-    <Grid>
-        <TextBox
-            x:Name="LoginTextBox"
-            Width="1030"
-            Height="186"
-            Margin="0,172,0,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            FontSize="100"
-            Text="{Binding UserId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-        <Button
-            Width="834"
-            Height="224"
-            Margin="0,450,0,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            Command="{Binding ExecuteClickCommand}"
-            CommandParameter="{Binding Text, ElementName=LoginTextBox}"
-            Content="Button"
-            FontSize="100" />
+    <Grid Background="#3A3935">
+        <Image
+            Margin="-98,0,664,0"
+            Source="/Assets/Images/artboard1.png"
+            Stretch="Fill" />
+        <Image
+            Margin="636,143,734,533"
+            Source="/Assets/Images/artboard2.png"
+            Stretch="Fill" />
+        <Image
+            Margin="0,-80,606,-14"
+            Source="/Assets/Images/artboard4.png"
+            Stretch="Fill" />
+        <Grid Margin="941,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="840" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Grid x:Name="RegisterForm" Background="#3A3935">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="180" />
+                    <RowDefinition Height="505" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Label
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Content="SIGN UP"
+                    FontFamily="Montserrat Alternates SemiBold"
+                    FontSize="100"
+                    Foreground="#CB6E59" />
+                <StackPanel Grid.Row="1">
+                    <Grid Margin="0,0,0,10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Label
+                            Margin="20,0,20,0"
+                            Content="Email"
+                            FontFamily="Montserrat Alternates Medium"
+                            FontSize="40"
+                            Foreground="#FFEAEA" />
+                        <TextBox
+                            x:Name="LoginEmail"
+                            Grid.Row="1"
+                            Style="{StaticResource TextboxTheme}"
+                            Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                    <Grid Margin="0,0,0,10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Label
+                            Margin="20,0,20,0"
+                            Content="Password"
+                            FontFamily="Montserrat Alternates Medium"
+                            FontSize="40"
+                            Foreground="#FFEAEA" />
+                        <components:BindablePasswordBox
+                            x:Name="RegisterPassword"
+                            Grid.Row="1"
+                            Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                    <Grid Margin="0,0,0,10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Label
+                            Margin="20,0,20,0"
+                            Content="Re-Password"
+                            FontFamily="Montserrat Alternates Medium"
+                            FontSize="40"
+                            Foreground="#FFEAEA" />
+                        <components:BindablePasswordBox
+                            x:Name="RegisterRePassword"
+                            Grid.Row="1"
+                            Password="{Binding RePassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                </StackPanel>
+                <Border
+                    Grid.Row="2"
+                    Height="100"
+                    Margin="26"
+                    Background="#CB6E59"
+                    CornerRadius="20"
+                    Cursor="Hand">
+                    <Border.InputBindings>
+                        <MouseBinding
+                            Command="{Binding ExecuteRegisterCommand}"
+                            CommandParameter="{Binding Visibility, ElementName=LoginForm}"
+                            MouseAction="LeftClick" />
+                    </Border.InputBindings>
+                    <Border.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <Trigger Property="Border.IsMouseOver" Value="True">
+                                    <Setter Property="Border.Opacity" Value="0.8" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <Label
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="Submit"
+                        FontFamily="Montserrat Alternates Medium"
+                        FontSize="40"
+                        Foreground="#FFEAEA" />
+                </Border>
+            </Grid>
+
+            <Grid
+                x:Name="LoginForm"
+                Background="#3A3935"
+                Visibility="{Binding IsVisible}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="180" />
+                    <RowDefinition Height="505" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Label
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Content="LOGIN"
+                    FontFamily="Montserrat Alternates SemiBold"
+                    FontSize="100"
+                    Foreground="#CB6E59" />
+                <StackPanel Grid.Row="1" Margin="0,20,0,0">
+                    <Grid Margin="0,0,0,20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Label
+                            Margin="20,0,20,0"
+                            Content="Email"
+                            FontFamily="Montserrat Alternates Medium"
+                            FontSize="40"
+                            Foreground="#FFEAEA" />
+                        <TextBox
+                            x:Name="RegisterEmail"
+                            Grid.Row="1"
+                            Style="{StaticResource TextboxTheme}"
+                            Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                    <Grid Margin="0,0,0,20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Label
+                            Margin="20,0,20,0"
+                            Content="Password"
+                            FontFamily="Montserrat Alternates Medium"
+                            FontSize="40"
+                            Foreground="#FFEAEA" />
+                        <components:BindablePasswordBox
+                            x:Name="LoginPassword"
+                            Grid.Row="1"
+                            Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                </StackPanel>
+                <Border
+                    Grid.Row="2"
+                    Height="100"
+                    Margin="26"
+                    Background="#CB6E59"
+                    CornerRadius="20"
+                    Cursor="Hand">
+                    <Border.InputBindings>
+                        <MouseBinding Command="{Binding ExecuteLoginCommand}" MouseAction="LeftClick" />
+                    </Border.InputBindings>
+                    <Border.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <Trigger Property="Border.IsMouseOver" Value="True">
+                                    <Setter Property="Border.Opacity" Value="0.8" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <Label
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="Login"
+                        FontFamily="Montserrat Alternates Medium"
+                        FontSize="40"
+                        Foreground="#FFEAEA" />
+                </Border>
+            </Grid>
+
+            <ToggleButton
+                x:Name="FormDesc"
+                Grid.Row="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Background="Transparent"
+                Command="{Binding ExecuteChangeFormCommand}"
+                CommandParameter="{Binding Visibility, ElementName=LoginForm}"
+                Content="{Binding IsChecked, ElementName=FormDesc, Converter={StaticResource FormDescConverter}}"
+                FontFamily="Montserrat Alternates Medium"
+                FontSize="24"
+                Foreground="#CB6E59"
+                Style="{StaticResource ToggleButtonTheme}" />
+        </Grid>
     </Grid>
 </Window>

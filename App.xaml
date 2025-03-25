@@ -20,6 +20,7 @@
                 <ResourceDictionary Source="/Theme/Window/ToggleButtonTheme.xaml" />
                 <ResourceDictionary Source="/Theme/OrderPage/WishlistTheme.xaml" />
                 <ResourceDictionary Source="/Theme/Window/ProgressBarTheme.xaml" />
+                <ResourceDictionary Source="/Theme/Window/TextboxTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
@@ -34,6 +35,8 @@
 
             <converter:WishlistIconConverter x:Key="WishlistIconConverter" />
             <converter:ThumbnailConverter x:Key="ThumbnailConverter" />
+            <converter:FormDescConverter x:Key="FormDescConverter" />
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
