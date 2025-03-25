@@ -31,12 +31,6 @@
             <DataTemplate DataType="{x:Type viewmodels:OrderHistoryViewModel}">
                 <views:OrderHistoryView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:LiveDataViewModel}">
-                <views:LiveDataView />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:DemoPayOsViewModel}">
-                <views:DemoPayOs />
-            </DataTemplate>
 
             <converter:WishlistIconConverter x:Key="WishlistIconConverter" />
             <converter:ThumbnailConverter x:Key="ThumbnailConverter" />

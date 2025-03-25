@@ -32,12 +32,6 @@ namespace QuanAnNhat.ViewModels
                 case "Order History":
                     SelectedViewModel = new OrderHistoryViewModel();
                     break;
-                case "LiveData":
-                    SelectedViewModel = new LiveDataViewModel();
-                    break;
-                case "DemoPayOS":
-                    SelectedViewModel = new DemoPayOsViewModel();
-                    break;
             }
         }
     }
