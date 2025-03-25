@@ -39,6 +39,8 @@ namespace QuanAnNhat.ViewModels
         private string? _CategoryText;
         [ObservableProperty]
         private bool _IsFiltered;
+        [ObservableProperty]
+        private Visibility _IsVisible;
 
         private string? _SearchText;
         public string? SearchText
@@ -67,20 +69,31 @@ namespace QuanAnNhat.ViewModels
             _UserId = 6;
             orderCode = 0;
 
-            _ = InitAsync();
+            _ = Loading(2, false);
+            _ = GetDishlists();
+            _ = GetTables();
 
             LiveData();
         }
 
-        private async Task InitAsync()
+        private async Task Loading(int filterStatus, bool isCategory)
         {
-            await GetDishlists();
-            await GetMenu(2);
-            await GetTables();
+            IsVisible = Visibility.Visible;
+
+            if (!isCategory)
+            {
+                await GetMenu(filterStatus);
+            } else
+            {
+                await GetMenuByCategory(CategoryText);
+            }
+
+            IsVisible = Visibility.Hidden;
         }
 
         public async Task GetDishlists()
         {
+            Dishlists.Clear();
             using (var context = new QuanannhatContext())
             {
                 var res = await context.Dishlists.ToListAsync();
@@ -96,6 +109,7 @@ namespace QuanAnNhat.ViewModels
             CategoryText = null;
             Dishes.Clear();
 
+            await Task.Delay(1000);
             using (var context = new QuanannhatContext())
             {
                 List<Dish> result;
@@ -106,8 +120,7 @@ namespace QuanAnNhat.ViewModels
                         IsFiltered = false;
                         break;
                     case 2:
-                        result = await context.Dishes
-                            .OrderByDescending(d => d.Price).Include(d => d.Wishlists).ToListAsync();
+                        result = await context.Dishes.OrderByDescending(d => d.Price).Include(d => d.Wishlists).ToListAsync();
                         IsFiltered = true;
                         break;
                     default:
@@ -120,22 +133,54 @@ namespace QuanAnNhat.ViewModels
             }
         }
 
-
         public async Task GetMenuByCategory(string? category)
         {
             CategoryText = category;
             Dishes.Clear();
             using (var context = new QuanannhatContext())
             {
-                var res = await context.Dishes.Include(x => x.Dishlist).Include(d => d.Wishlists).Where(x => x.Dishlist.Name == category && x.DishlistId == x.Dishlist.Id).ToListAsync();
-                foreach (var item in res)
+                switch (category)
                 {
-                    Dishes.Add(item);
+                    case "Wishlist":
+                        var res1 = await context.Dishes.Include(d => d.Wishlists).ToListAsync();
+                        foreach (var item in res1)
+                        {
+                            foreach (var wish in item.Wishlists)
+                            {
+                                if (wish.UserId == _UserId)
+                                {
+                                    Dishes.Add(item);
+                                }
+                            }
+                        }
+                        break;
+                    case "Must Try":
+                        var res2 = await context.Dishes.Where(d => d.MustTry == 2).Include(d => d.Wishlists).ToListAsync();
+                        foreach (var item in res2)
+                        {
+                            Dishes.Add(item);
+                        }
+                        break;
+                    case "Best Seller":
+                        var res3 = await context.Dishes.OrderByDescending(d => d.TotalSold).Include(d => d.Wishlists).ToListAsync();
+                        foreach (var item in res3)
+                        {
+                            Dishes.Add(item);
+                        }
+                        break;
+                    default:
+                        var res4 = await context.Dishes.Include(x => x.Dishlist).Include(d => d.Wishlists).Where(x => x.Dishlist.Name == category && x.DishlistId == x.Dishlist.Id).ToListAsync();
+                        foreach (var item in res4)
+                        {
+                            Dishes.Add(item);
+                        }
+                        break;
                 }
+                
             }
         }
 
-        public async Task SearchDishes(string? searchText)
+        public async void SearchDishes(string? searchText)
         {
             Dishes.Clear();
             using (var context = new QuanannhatContext())
@@ -302,8 +347,7 @@ namespace QuanAnNhat.ViewModels
             using (var context = new QuanannhatContext())
             {
                 var res = context.Wishlists.ToList();
-                int? count = res.Max(w => w.Id);
-                
+                int count = res.Max(w => w.Id) + 1;
                 bool check = true;
 
                 foreach (var item in res)
@@ -319,7 +363,7 @@ namespace QuanAnNhat.ViewModels
                 {
                     context.Wishlists.Add(new Wishlist()
                     {
-                        Id = (int)count,
+                        Id = count,
                         DishId = dishId,
                         UserId = _UserId
                     });
@@ -336,13 +380,15 @@ namespace QuanAnNhat.ViewModels
 
                 if (!string.IsNullOrEmpty(CategoryText))
                 {
-                    await GetMenuByCategory(CategoryText);
-                } else if (IsFiltered) 
+                    await Loading(1, true);
+                }
+                else if (IsFiltered)
                 {
-                    await GetMenu(2);
-                } else
+                    await Loading(2, false);
+                }
+                else
                 {
-                    await GetMenu(1);
+                    await Loading(1, false);
                 }
             }
         }
@@ -384,10 +430,10 @@ namespace QuanAnNhat.ViewModels
         }
 
         [RelayCommand]
-        public void ExecuteFilter(object parameter)
+        public async Task ExecuteFilter(object parameter)
         {
             int filterStatus = Convert.ToBoolean(parameter) ? 1 : 2;
-            GetMenu(filterStatus);
+            await Loading(filterStatus, false);
         }
 
         [RelayCommand]
@@ -397,9 +443,9 @@ namespace QuanAnNhat.ViewModels
         }
 
         [RelayCommand]
-        public void ExcuteGetMenu(object parameter)
+        public async Task ExcuteGetMenu(object parameter)
         {
-            GetMenuByCategory(parameter.ToString());
+            await GetMenuByCategory(parameter.ToString());
         }
 
         [RelayCommand]

@@ -95,23 +95,46 @@
                     Margin="20,0,20,0"
                     HorizontalScrollBarVisibility="Auto"
                     VerticalScrollBarVisibility="Disabled">
-                    <ItemsControl x:Name="CategoriesItemControl" ItemsSource="{Binding Dishlists}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <RadioButton
-                                    Command="{Binding DataContext.ExcuteGetMenuCommand, ElementName=CategoriesItemControl}"
-                                    CommandParameter="{Binding Name}"
-                                    Content="{Binding Name}"
-                                    GroupName="CategoryRadioButton"
-                                    Style="{StaticResource CategoryTheme}" />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                    </ItemsControl>
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton
+                            x:Name="WishlistBtn"
+                            Command="{Binding ExcuteGetMenuCommand}"
+                            CommandParameter="{Binding Content, ElementName=WishlistBtn}"
+                            Content="Wishlist"
+                            GroupName="CategoryRadioButton"
+                            Style="{StaticResource CategoryTheme}" />
+                        <RadioButton
+                            x:Name="BestSellerBtn"
+                            Command="{Binding ExcuteGetMenuCommand}"
+                            CommandParameter="{Binding Content, ElementName=BestSellerBtn}"
+                            Content="Best Seller"
+                            GroupName="CategoryRadioButton"
+                            Style="{StaticResource CategoryTheme}" />
+                        <RadioButton
+                            x:Name="MustTryBtn"
+                            Command="{Binding ExcuteGetMenuCommand}"
+                            CommandParameter="{Binding Content, ElementName=MustTryBtn}"
+                            Content="Must Try"
+                            GroupName="CategoryRadioButton"
+                            Style="{StaticResource CategoryTheme}" />
+                        <ItemsControl x:Name="CategoriesItemControl" ItemsSource="{Binding Dishlists}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <RadioButton
+                                        Command="{Binding DataContext.ExcuteGetMenuCommand, ElementName=CategoriesItemControl}"
+                                        CommandParameter="{Binding Name}"
+                                        Content="{Binding Name}"
+                                        GroupName="CategoryRadioButton"
+                                        Style="{StaticResource CategoryTheme}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </StackPanel>
                 </ScrollViewer>
             </Grid>
             <Grid Grid.Row="2">
@@ -227,6 +250,18 @@
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </ScrollViewer>
+                <StackPanel
+                    Grid.Row="1"
+                    Width="100"
+                    Height="100"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Visibility="{Binding IsVisible}">
+                    <ProgressBar
+                        Width="100"
+                        Height="100"
+                        Style="{StaticResource CircularProgressBar}" />
+                </StackPanel>
             </Grid>
         </Grid>
         <Grid Grid.Column="1" Background="#FFEDDB">
