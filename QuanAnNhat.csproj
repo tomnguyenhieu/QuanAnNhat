@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Images\artboard1.png" />
+    <None Remove="Assets\Images\artboard2.png" />
+    <None Remove="Assets\Images\artboard3.png" />
+    <None Remove="Assets\Images\artboard4.png" />
     <None Remove="Assets\Images\background.png" />
     <None Remove="Assets\Images\dish1.jpg" />
     <None Remove="Assets\Images\Dishes\1.jpg" />
@@ -58,6 +62,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Images\artboard1.png" />
+    <Resource Include="Assets\Images\artboard2.png" />
+    <Resource Include="Assets\Images\artboard3.png" />
+    <Resource Include="Assets\Images\artboard4.png" />
     <Resource Include="Assets\Images\background.png" />
     <Resource Include="Assets\Images\dish1.jpg" />
     <Resource Include="Assets\Images\Dishes\1.jpg" />
