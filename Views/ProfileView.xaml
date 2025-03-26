@@ -23,6 +23,45 @@
                     <RowDefinition Height="390" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
+                <StackPanel Margin="0,40,0,0">
+                    <Grid Margin="0,0,0,20">
+                        <Border
+                            Width="210"
+                            Height="210"
+                            CornerRadius="1000">
+                            <Border.Background>
+                                <ImageBrush ImageSource="/Assets/Images/Avatar/3ce034e2a378aef1413833e9748f654b.jpg" Stretch="UniformToFill" />
+                            </Border.Background>
+                        </Border>
+                        <Border
+                            Width="50"
+                            Height="50"
+                            Margin="312,144,173,16"
+                            Background="#A15E50"
+                            CornerRadius="100">
+                            <Label
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Content="&#xf044;"
+                                FontFamily="Font Awesome 6 Free Solid"
+                                FontSize="24"
+                                Foreground="#FFEDDB" />
+                        </Border>
+                    </Grid>
+                    <Label
+                        HorizontalAlignment="Center"
+                        Content="{Binding UserName}"
+                        FontFamily="Montserrat Alternates"
+                        FontSize="40"
+                        FontWeight="Bold"
+                        Foreground="#42150D" />
+                    <Label
+                        HorizontalAlignment="Center"
+                        Content="Customer"
+                        FontFamily="Montserrat Alternates"
+                        FontSize="26"
+                        Foreground="#5C443F" />
+                </StackPanel>
                 <Border Grid.Row="1">
                     <StackPanel>
                         <RadioButton
@@ -59,6 +98,96 @@
             Margin="20,45,45,45"
             Background="#FFEDDB"
             CornerRadius="48"
-            Visibility="{Binding InfoVisible}" />
+            Visibility="{Binding InfoVisible}">
+            <Grid Margin="50,0,50,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="530" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Label
+                        VerticalAlignment="Center"
+                        Content="Personal Information"
+                        FontFamily="Montserrat Alternates SemiBold"
+                        FontSize="40" />
+                    <Border
+                        Width="50"
+                        Height="50"
+                        HorizontalAlignment="Right"
+                        Background="#A15E50"
+                        CornerRadius="10">
+                        <Label
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Content="&#xf4ff;"
+                            FontFamily="Font Awesome 6 Free Solid"
+                            FontSize="24"
+                            Foreground="#FFEFEC" />
+                    </Border>
+                </Grid>
+                <StackPanel Grid.Row="1">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <RadioButton
+                                Content="Male"
+                                FontFamily="Montserrat Alternates Medium"
+                                FontSize="30"
+                                Foreground="#7D4A40"
+                                Style="{StaticResource RadioButtonTheme}" />
+                            <RadioButton
+                                Grid.Column="1"
+                                Content="Female"
+                                FontFamily="Montserrat Alternates Medium"
+                                FontSize="30"
+                                Foreground="#7D4A40"
+                                Style="{StaticResource RadioButtonTheme}" />
+                        </Grid>
+                        <StackPanel Margin="0,0,0,10">
+                            <Label
+                                Content="Name"
+                                FontFamily="Montserrat Alternates Medium"
+                                FontSize="30"
+                                Foreground="#7D4A40" />
+                            <TextBox Style="{StaticResource TextboxTheme}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,10">
+                            <Label
+                                Content="Phone"
+                                FontFamily="Montserrat Alternates Medium"
+                                FontSize="30"
+                                Foreground="#7D4A40" />
+                            <TextBox Style="{StaticResource TextboxTheme}" />
+                        </StackPanel>
+                        <StackPanel>
+                            <Label
+                                Content="Address"
+                                FontFamily="Montserrat Alternates Medium"
+                                FontSize="30"
+                                Foreground="#7D4A40" />
+                            <TextBox Style="{StaticResource TextboxTheme}" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+                <Border
+                    Grid.Row="2"
+                    Width="300"
+                    Margin="0,30,0,30"
+                    Background="#B03A25"
+                    CornerRadius="20">
+                    <Label
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="Save changes"
+                        FontFamily="Montserrat Alternates SemiBold"
+                        FontSize="29"
+                        Foreground="#FFEDDB" />
+                </Border>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

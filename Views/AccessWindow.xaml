@@ -50,7 +50,7 @@
                     FontSize="100"
                     Foreground="#CB6E59" />
                 <StackPanel Grid.Row="1">
-                    <Grid Margin="0,0,0,10">
+                    <Grid Margin="20,0,20,10">
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition />
@@ -158,7 +158,7 @@
                     FontSize="100"
                     Foreground="#CB6E59" />
                 <StackPanel Grid.Row="1" Margin="0,20,0,0">
-                    <Grid Margin="0,0,0,20">
+                    <Grid Margin="20,0,20,20">
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition />

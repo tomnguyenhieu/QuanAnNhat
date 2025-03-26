@@ -1,5 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
+using QuanAnNhat.DBContext;
+using QuanAnNhat.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +22,8 @@ namespace QuanAnNhat.ViewModels
         private Visibility _PassVisible;
         [ObservableProperty]
         private Visibility _FeedbackVisible;
+        [ObservableProperty]
+        private string? _UserName;
 
         public ProfileViewModel(string? userId)
         {
@@ -26,6 +31,12 @@ namespace QuanAnNhat.ViewModels
             InfoVisible = Visibility.Visible;
             PassVisible = Visibility.Hidden;
             FeedbackVisible = Visibility.Hidden;
+
+            using (var context = new QuanannhatContext())
+            {
+                var user = context.Users.Where(u => u.Id == _UserId).Include(u => u.Information).First();
+                UserName = user.Information.Name;
+            }
         }
 
         [RelayCommand]
