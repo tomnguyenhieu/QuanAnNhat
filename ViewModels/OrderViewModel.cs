@@ -273,6 +273,7 @@ namespace QuanAnNhat.ViewModels
                     TableId = SelectedTable.Id
                 };
                 context.OrderBills.Add(orderBill);
+                context.Tables.Where(t => t.Id == SelectedTable.Id).ExecuteUpdate(u => u.SetProperty(u => u.Status, 1));
                 context.SaveChanges();
             }
         }
@@ -295,6 +296,7 @@ namespace QuanAnNhat.ViewModels
                         OrderbillId = context.OrderBills.Where(b => b.UserId == _UserId).OrderByDescending(o => o.Id).First().Id
                     };
                     context.Orders.Add(order);
+                    context.Dishes.Where(d => d.Id == dish.Id).ExecuteUpdate(u => u.SetProperty(u => u.Quantity, u => u.Quantity - dish.Quantity));
                 }
                 context.SaveChanges();
             }
@@ -410,11 +412,17 @@ namespace QuanAnNhat.ViewModels
                         var _bill = context.OrderBills.Where(b => b.Id == orderCode).First();
                         if (_bill.BillStatus == 2)
                         {
+                            var orders = context.Orders.Where(o => o.OrderbillId == orderCode).ToList();
                             switch (paymentStatus)
                             {
                                 case "CANCELLED":
                                     await context.OrderBills.Where(b => b.Id == orderCode).ExecuteUpdateAsync(u => u.SetProperty(b => b.BillStatus, 1));
                                     MessageBox.Show("Hủy thanh toán thành công!");
+                                    foreach (var order in orders)
+                                    {
+                                        var dish = context.Dishes.Where(d => d.Id == order.DishId).First();
+                                        context.Dishes.Where(d => d.Id == dish.Id).ExecuteUpdate(u => u.SetProperty(u => u.Quantity, u => u.Quantity + order.Quantity));
+                                    }
                                     break;
                                 case "PAID":
                                     await context.OrderBills.Where(b => b.Id == orderCode).ExecuteUpdateAsync(u => u.SetProperty(b => b.BillStatus, 3));
@@ -423,9 +431,16 @@ namespace QuanAnNhat.ViewModels
                                 case "EXPIRED":
                                     await context.OrderBills.Where(b => b.Id == orderCode).ExecuteUpdateAsync(u => u.SetProperty(b => b.BillStatus, 1));
                                     MessageBox.Show("Hết hạn thanh toán!");
+                                    foreach (var order in orders)
+                                    {
+                                        var dish = context.Dishes.Where(d => d.Id == order.DishId).First();
+                                        context.Dishes.Where(d => d.Id == dish.Id).ExecuteUpdate(u => u.SetProperty(u => u.Quantity, u => u.Quantity + order.Quantity));
+                                    }
                                     break;
                             }
                         }
+
+                        context.SaveChanges();
                     }
                 }
             }
