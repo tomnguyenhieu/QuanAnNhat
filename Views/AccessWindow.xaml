@@ -20,11 +20,11 @@
             Source="/Assets/Images/artboard1.png"
             Stretch="Fill" />
         <Image
-            Margin="636,143,734,533"
+            Margin="626,172,744,504"
             Source="/Assets/Images/artboard2.png"
             Stretch="Fill" />
         <Image
-            Margin="0,-80,606,-14"
+            Margin="-16,-47,622,-47"
             Source="/Assets/Images/artboard4.png"
             Stretch="Fill" />
         <Grid Margin="941,0,0,0">
@@ -33,7 +33,10 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <Grid x:Name="RegisterForm" Background="#3A3935">
+            <Grid
+                x:Name="RegisterForm"
+                Margin="40,0,40,0"
+                Background="#3A3935">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="180" />
                     <RowDefinition Height="505" />
@@ -139,6 +142,7 @@
 
             <Grid
                 x:Name="LoginForm"
+                Margin="40,0,40,0"
                 Background="#3A3935"
                 Visibility="{Binding IsVisible}">
                 <Grid.RowDefinitions>
