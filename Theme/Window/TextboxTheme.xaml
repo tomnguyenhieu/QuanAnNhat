@@ -10,7 +10,7 @@
                     <ControlTemplate TargetType="{x:Type TextBox}">
                         <Border
                             Height="100"
-                            Margin="20,0,20,0"
+                            Margin="{TemplateBinding Margin}"
                             Background="#F8E8D9"
                             CornerRadius="20">
                             <Border.Effect>

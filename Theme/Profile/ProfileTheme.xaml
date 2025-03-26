@@ -9,29 +9,33 @@
                     <ControlTemplate TargetType="{x:Type RadioButton}">
                         <Border
                             Background="{TemplateBinding Background}"
-                            CornerRadius="34"
+                            CornerRadius="26"
                             Cursor="Hand">
                             <TextBlock
-                                Margin="30,0,0,0"
+                                Margin="40,0,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                FontSize="30"
-                                Foreground="#7D4A40"
+                                FontFamily="Montserrat Alternates Medium"
+                                FontSize="26"
+                                Foreground="{TemplateBinding Foreground}"
                                 Text="{TemplateBinding Property=Content}" />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Setter Property="Margin" Value="20,20,20,10" />
+            <Setter Property="Margin" Value="40,10,40,10" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Background" Value="#FFEDDB" />
+            <Setter Property="Foreground" Value="#7D4A40" />
         </Style.Setters>
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Background" Value="#f5d6c2" />
+                <Setter Property="Foreground" Value="#42150D" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="#f5d6c2" />
+                <Setter Property="Foreground" Value="#42150D" />
             </Trigger>
         </Style.Triggers>
     </Style>
