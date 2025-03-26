@@ -44,7 +44,7 @@
                 Foreground="#CB6E59" />
             <StackPanel
                 Grid.Row="1"
-                Margin="20,0,20,0"
+                Margin="40,0,40,0"
                 VerticalAlignment="Center">
                 <Grid Margin="0,0,0,10">
                     <Grid.RowDefinitions>
@@ -124,7 +124,7 @@
             <Border
                 Grid.Row="2"
                 Height="100"
-                Margin="40"
+                Margin="60,0,60,0"
                 VerticalAlignment="Top"
                 Background="#CB6E59"
                 CornerRadius="20"

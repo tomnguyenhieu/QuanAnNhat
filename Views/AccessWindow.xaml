@@ -29,7 +29,7 @@
             Stretch="Fill" />
         <Grid Margin="941,0,0,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="840" />
+                <RowDefinition Height="820" />
                 <RowDefinition />
             </Grid.RowDefinitions>
 
@@ -103,7 +103,7 @@
                 <Border
                     Grid.Row="2"
                     Height="100"
-                    Margin="26"
+                    Margin="20,0,20,0"
                     Background="#CB6E59"
                     CornerRadius="20"
                     Cursor="Hand">
@@ -195,7 +195,7 @@
                 <Border
                     Grid.Row="2"
                     Height="100"
-                    Margin="26"
+                    Margin="20,0,20,0"
                     Background="#CB6E59"
                     CornerRadius="20"
                     Cursor="Hand">
