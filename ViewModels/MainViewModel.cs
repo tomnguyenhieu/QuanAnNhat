@@ -191,10 +191,10 @@ namespace QuanAnNhat.ViewModels
             var message = new MimeMessage();
             message.From.Add(MailAddressFrom);
             message.To.Add(MailAddressTo);
-            message.Subject = "Test sending mail from C#";
+            message.Subject = "Bạn có 1 thông báo mới từ Saku Ramen!!!";
             message.Body = new TextPart("plain")
             {
-                Text = $"Ma xac thuc cua ban la: {GenerateCode}"
+                Text = $"Mã xác thực của bạn là: {GenerateCode}"
             };
 
             using (var client = new SmtpClient())
@@ -243,8 +243,8 @@ namespace QuanAnNhat.ViewModels
         {
             if (RegisterValidate())
             {
-                MessageBox.Show("Đăng ký thành công!");
                 ProcessRegister();
+                MessageBox.Show("Đăng ký thành công!");
                 Password = RePassword = null;
                 ChangeForm(parameter.ToString());
             }

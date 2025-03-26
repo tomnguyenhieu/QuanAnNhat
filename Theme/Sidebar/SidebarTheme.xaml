@@ -16,6 +16,7 @@
                                 Margin="0,17,0,17"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
+                                FontFamily="Montserrat Alternates Medium"
                                 Text="{TemplateBinding Property=Content}" />
                         </Border>
                     </ControlTemplate>
@@ -30,6 +31,7 @@
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Opacity" Value="1" />
                 <Setter Property="Background" Value="#646963" />
+                <Setter Property="Foreground" Value="#F8E8D9" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Opacity" Value="1" />

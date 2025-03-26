@@ -26,17 +26,18 @@
             </Grid.ColumnDefinitions>
             <Grid Background="#3A3935">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="250" />
+                    <RowDefinition Height="300" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <StackPanel Margin="25">
                     <Border
                         x:Name="logo"
-                        Width="130"
-                        Height="{Binding Width, ElementName=logo}"
-                        Margin="0,0,0,20"
-                        Background="#B23D23"
-                        CornerRadius="100" />
+                        Width="220"
+                        Height="170">
+                        <Border.Background>
+                            <ImageBrush ImageSource="/Assets/Images/logo.png" Stretch="UniformToFill" />
+                        </Border.Background>
+                    </Border>
                     <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"

@@ -57,6 +57,7 @@
     <None Remove="Assets\Images\intro2.jpg" />
     <None Remove="Assets\Images\intro3.jpg" />
     <None Remove="Assets\Images\intro4.jpg" />
+    <None Remove="Assets\Images\logo.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -125,6 +126,7 @@
     <Resource Include="Assets\Images\intro2.jpg" />
     <Resource Include="Assets\Images\intro3.jpg" />
     <Resource Include="Assets\Images\intro4.jpg" />
+    <Resource Include="Assets\Images\logo.png" />
   </ItemGroup>
 
   <ItemGroup>
