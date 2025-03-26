@@ -38,7 +38,7 @@ namespace QuanAnNhat.ViewModels
             using (var context = new QuanannhatContext())
             {
                 var tmpDishes =  await context.Dishes.Where(x => x.MustTry == 2 && x.Status == 2).Include(x => x.Wishlists).ToListAsync();
-                int count = 1;
+                int count = 0;
                 foreach (var _dish in tmpDishes)
                 {
                     count++;
