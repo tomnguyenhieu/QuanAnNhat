@@ -162,7 +162,8 @@ namespace QuanAnNhat.ViewModels
             {
                 var info = new Information()
                 {
-                    Id = context.Informations.ToList().Count + 1
+                    Id = context.Informations.ToList().Count + 1,
+                    Name = $"Customer {context.Informations.ToList().Count + 1}"
                 };
                 context.Informations.Add(info);
                 var user = new User()
