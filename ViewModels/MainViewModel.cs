@@ -219,6 +219,9 @@ namespace QuanAnNhat.ViewModels
                 case "Order History":
                     SelectedViewModel = new OrderHistoryViewModel(UserId);
                     break;
+                case "Profile":
+                    SelectedViewModel = new ProfileViewModel(UserId);
+                    break;
             }
         }
 

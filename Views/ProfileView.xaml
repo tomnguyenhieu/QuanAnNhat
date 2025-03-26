@@ -1,0 +1,64 @@
+﻿<UserControl
+    x:Class="QuanAnNhat.Views.ProfileView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:QuanAnNhat.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="clr-namespace:QuanAnNhat.ViewModels"
+    d:DesignHeight="900"
+    d:DesignWidth="1300"
+    mc:Ignorable="d">
+    <Grid Background="#BC4C33">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="600" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Border
+            Margin="45,45,20,45"
+            Background="#FFEDDB"
+            CornerRadius="48">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="390" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Border Grid.Row="1">
+                    <StackPanel>
+                        <RadioButton
+                            x:Name="InfoBtn"
+                            Height="100"
+                            Command="{Binding ExecuteChangeTabCommand}"
+                            CommandParameter="{Binding Name, ElementName=InfoBtn}"
+                            Content="Person Infomation"
+                            GroupName="ProfileBtn"
+                            IsChecked="True"
+                            Style="{StaticResource ProfileTheme}" />
+                        <RadioButton
+                            x:Name="PassBtn"
+                            Height="100"
+                            Command="{Binding ExecuteChangeTabCommand}"
+                            CommandParameter="{Binding Name, ElementName=PassBtn}"
+                            Content="Password"
+                            GroupName="ProfileBtn"
+                            Style="{StaticResource ProfileTheme}" />
+                        <RadioButton
+                            x:Name="FeedbackBtn"
+                            Height="100"
+                            Command="{Binding ExecuteChangeTabCommand}"
+                            CommandParameter="{Binding Name, ElementName=FeedbackBtn}"
+                            Content="Feedback"
+                            GroupName="ProfileBtn"
+                            Style="{StaticResource ProfileTheme}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+        <Border
+            Grid.Column="1"
+            Margin="20,45,45,45"
+            Background="#FFEDDB"
+            CornerRadius="48"
+            Visibility="{Binding InfoVisible}" />
+    </Grid>
+</UserControl>

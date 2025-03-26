@@ -71,6 +71,14 @@
                         Content="Order History"
                         Foreground="#FBEAD9"
                         Style="{StaticResource SidebarTheme}" />
+                    <RadioButton
+                        x:Name="ProfileBtn"
+                        HorizontalAlignment="Center"
+                        Command="{Binding ExcuteUpdateViewCommand}"
+                        CommandParameter="{Binding Content, ElementName=ProfileBtn}"
+                        Content="Profile"
+                        Foreground="#FBEAD9"
+                        Style="{StaticResource SidebarTheme}" />
                 </StackPanel>
             </Grid>
             <ContentControl Grid.Column="1" Content="{Binding SelectedViewModel}" />

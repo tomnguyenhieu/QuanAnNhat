@@ -21,6 +21,7 @@
                 <ResourceDictionary Source="/Theme/OrderPage/WishlistTheme.xaml" />
                 <ResourceDictionary Source="/Theme/Window/ProgressBarTheme.xaml" />
                 <ResourceDictionary Source="/Theme/Window/TextboxTheme.xaml" />
+                <ResourceDictionary Source="/Theme/Profile/ProfileTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
@@ -31,6 +32,9 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:OrderHistoryViewModel}">
                 <views:OrderHistoryView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:ProfileViewModel}">
+                <views:ProfileView />
             </DataTemplate>
 
             <converter:WishlistIconConverter x:Key="WishlistIconConverter" />
