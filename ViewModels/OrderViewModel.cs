@@ -306,7 +306,9 @@ namespace QuanAnNhat.ViewModels
         {
             string text = File.ReadAllText(@"D:\Learning\C#\HAU\QuanAnNhat\.config.json");
             config = JsonSerializer.Deserialize<Config>(text);
+
             payOS = new PayOS(config.ClientId, config.ApiKey, config.ChecksumKey);
+
             itemDatas = new List<ItemData>();
 
             int PaymentAmount = 0;
@@ -321,7 +323,6 @@ namespace QuanAnNhat.ViewModels
                 using (var context = new QuanannhatContext())
                 {
                     orderCode = context.OrderBills.Where(b => b.UserId == _UserId).OrderByDescending(o => o.Id).First().Id;
-                    Console.WriteLine(orderCode);
                     paymentData = new PaymentData(orderCode, PaymentAmount, $"Thanh toan bill #{orderCode}", itemDatas, "http://localhost/", "http://localhost/")
                     {
                         expiredAt = new DateTimeOffset(DateTime.UtcNow.AddMinutes(5)).ToUnixTimeSeconds()
@@ -353,7 +354,6 @@ namespace QuanAnNhat.ViewModels
                 var res = context.Wishlists.ToList();
                 int count = res.Max(w => w.Id) + 1;
                 bool check = true;
-
                 foreach (var item in res)
                 {
                     if (item.DishId == dishId && item.UserId == _UserId)
@@ -362,7 +362,6 @@ namespace QuanAnNhat.ViewModels
                         break;
                     }
                 }
-
                 if (check)
                 {
                     context.Wishlists.Add(new Wishlist()

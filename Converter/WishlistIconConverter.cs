@@ -12,7 +12,6 @@ namespace QuanAnNhat.Converter
         {
             FontFamily fontRegular = new FontFamily("Font Awesome 6 Free Regular");
             FontFamily fontSolid = new FontFamily("Font Awesome 6 Free Solid");
-
             int dishId = SystemConvert.ToInt32(values[0]);
             int userId;
             if (values[1] is int id)
@@ -23,7 +22,6 @@ namespace QuanAnNhat.Converter
             {
                 return fontRegular;
             }
-
             foreach (var item in (List<Wishlist>)values[2])
             {
                 if (item.DishId == dishId && item.UserId == userId)
@@ -31,7 +29,6 @@ namespace QuanAnNhat.Converter
                     return fontSolid;
                 }
             }
-
             return fontRegular;
         }
 
