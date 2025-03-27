@@ -18,6 +18,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using Windows.System;
 using Windows.UI.StartScreen;
 
 namespace QuanAnNhat.ViewModels
@@ -25,6 +26,7 @@ namespace QuanAnNhat.ViewModels
     partial class OrderViewModel : ObservableObject
     {
         public int _UserId { get; set; }
+        public string? _UserName { get; set; }
         public ObservableCollection<Dishlist> Dishlists { get; set; }
         public ObservableCollection<Dish> Dishes { get; set; }
         public Dishlist Category { get; set; }
@@ -62,20 +64,28 @@ namespace QuanAnNhat.ViewModels
 
         public OrderViewModel(string? userid)
         {
-            Console.WriteLine($"Order: {userid}");
-            Dishlists = new ObservableCollection<Dishlist>();
-            Dishes = new ObservableCollection<Dish>();
-            Cart = new ObservableCollection<Dish>();
-            Tables = new List<Table>();
-
             _UserId = Convert.ToInt32(userid);
-            orderCode = 0;
+            Init();
 
             _ = Loading(2, false);
             _ = GetDishlists();
             _ = GetTables();
 
             LiveData();
+        }
+
+        public void Init()
+        {
+            Dishlists = new ObservableCollection<Dishlist>();
+            Dishes = new ObservableCollection<Dish>();
+            Cart = new ObservableCollection<Dish>();
+            Tables = new List<Table>();
+            using (var context = new QuanannhatContext())
+            {
+                var user = context.Users.Where(u => u.Id == _UserId).Include(u => u.Information).FirstOrDefault();
+                _UserName = user.Information.Name;
+            }
+            orderCode = 0;
         }
 
         private async Task Loading(int filterStatus, bool isCategory)

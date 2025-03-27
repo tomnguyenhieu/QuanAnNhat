@@ -327,7 +327,7 @@
                             <Label
                                 Grid.Column="1"
                                 VerticalContentAlignment="Center"
-                                Content="Nguyen Thi Duong Dua"
+                                Content="{Binding _UserName}"
                                 FontFamily="Montserrat Alternates"
                                 FontSize="24"
                                 Foreground="#42150D" />
