@@ -41,7 +41,7 @@
             <converter:WishlistIconConverter x:Key="WishlistIconConverter" />
             <converter:ThumbnailConverter x:Key="ThumbnailConverter" />
             <converter:FormDescConverter x:Key="FormDescConverter" />
-
+            <converter:GenderConverter x:Key="GenderConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

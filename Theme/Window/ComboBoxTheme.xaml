@@ -19,7 +19,7 @@
                 Grid.ColumnSpan="2"
                 Background="{StaticResource ComboBoxNormalBackgroundBrush}"
                 BorderBrush="Transparent"
-                CornerRadius="10">
+                CornerRadius="15">
                 <Border.Effect>
                     <DropShadowEffect
                         BlurRadius="10"
@@ -34,7 +34,7 @@
                 Grid.Column="1"
                 Background="#B03A25"
                 BorderBrush="Transparent"
-                CornerRadius="0 10 10 0">
+                CornerRadius="0 15 15 0">
                 <Border.Effect>
                     <DropShadowEffect
                         BlurRadius="10"

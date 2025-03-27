@@ -50,7 +50,7 @@
                     </Grid>
                     <Label
                         HorizontalAlignment="Center"
-                        Content="{Binding UserName}"
+                        Content="{Binding Information.Name}"
                         FontFamily="Montserrat Alternates"
                         FontSize="40"
                         FontWeight="Bold"
@@ -138,6 +138,7 @@
                                 FontFamily="Montserrat Alternates Medium"
                                 FontSize="30"
                                 Foreground="#7D4A40"
+                                IsChecked="{Binding Information.Gender, Converter={StaticResource GenderConverter}, ConverterParameter=Male}"
                                 Style="{StaticResource RadioButtonTheme}" />
                             <RadioButton
                                 Grid.Column="1"
@@ -145,6 +146,7 @@
                                 FontFamily="Montserrat Alternates Medium"
                                 FontSize="30"
                                 Foreground="#7D4A40"
+                                IsChecked="{Binding Information.Gender, Converter={StaticResource GenderConverter}, ConverterParameter=Female}"
                                 Style="{StaticResource RadioButtonTheme}" />
                         </Grid>
                         <StackPanel Margin="0,0,0,10">
@@ -153,7 +155,7 @@
                                 FontFamily="Montserrat Alternates Medium"
                                 FontSize="30"
                                 Foreground="#7D4A40" />
-                            <TextBox Style="{StaticResource TextboxTheme}" />
+                            <TextBox Style="{StaticResource TextboxTheme}" Text="{Binding Information.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel Margin="0,0,0,10">
                             <Label
@@ -161,7 +163,7 @@
                                 FontFamily="Montserrat Alternates Medium"
                                 FontSize="30"
                                 Foreground="#7D4A40" />
-                            <TextBox Style="{StaticResource TextboxTheme}" />
+                            <TextBox Style="{StaticResource TextboxTheme}" Text="{Binding Information.Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel>
                             <Label
@@ -169,7 +171,12 @@
                                 FontFamily="Montserrat Alternates Medium"
                                 FontSize="30"
                                 Foreground="#7D4A40" />
-                            <TextBox Style="{StaticResource TextboxTheme}" />
+                            <ComboBox
+                                Height="100"
+                                FontSize="20"
+                                ItemsSource="{Binding Addresses}"
+                                SelectedItem="{Binding Information.Address, Mode=TwoWay}"
+                                Style="{StaticResource ComboBoxFlatStyle}" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -178,7 +185,28 @@
                     Width="300"
                     Margin="0,30,0,30"
                     Background="#B03A25"
-                    CornerRadius="20">
+                    CornerRadius="20"
+                    Cursor="Hand">
+                    <Border.InputBindings>
+                        <MouseBinding Command="{Binding ExecuteSaveChangesCommand}" MouseAction="LeftClick" />
+                    </Border.InputBindings>
+                    <Border.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <Trigger Property="Border.IsMouseOver" Value="True">
+                                    <Setter Property="Border.Opacity" Value="0.8" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <Border.Effect>
+                        <DropShadowEffect
+                            BlurRadius="10"
+                            Direction="270"
+                            Opacity="0.4"
+                            ShadowDepth="1"
+                            Color="Black" />
+                    </Border.Effect>
                     <Label
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
