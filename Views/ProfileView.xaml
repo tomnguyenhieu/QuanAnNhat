@@ -93,6 +93,7 @@
                 </Border>
             </Grid>
         </Border>
+
         <Border
             Grid.Column="1"
             Margin="20,45,45,45"
@@ -101,8 +102,8 @@
             Visibility="{Binding InfoVisible}">
             <Grid Margin="50,0,50,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="530" />
+                    <RowDefinition Height="100" />
+                    <RowDefinition Height="560" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <Grid>
@@ -127,60 +128,59 @@
                     </Border>
                 </Grid>
                 <StackPanel Grid.Row="1">
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <RadioButton
+                            Content="Male"
+                            FontFamily="Montserrat Alternates Medium"
+                            FontSize="30"
+                            Foreground="#7D4A40"
+                            IsChecked="{Binding Information.Gender, Converter={StaticResource GenderConverter}, ConverterParameter=Male}"
+                            Style="{StaticResource RadioButtonTheme}" />
+                        <RadioButton
+                            Grid.Column="1"
+                            Content="Female"
+                            FontFamily="Montserrat Alternates Medium"
+                            FontSize="30"
+                            Foreground="#7D4A40"
+                            IsChecked="{Binding Information.Gender, Converter={StaticResource GenderConverter}, ConverterParameter=Female}"
+                            Style="{StaticResource RadioButtonTheme}" />
+                    </Grid>
+                    <StackPanel Margin="0,0,0,10">
+                        <Label
+                            Content="Name"
+                            FontFamily="Montserrat Alternates Medium"
+                            FontSize="30"
+                            Foreground="#7D4A40" />
+                        <TextBox Style="{StaticResource TextboxTheme}" Text="{Binding Information.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,10">
+                        <Label
+                            Content="Phone"
+                            FontFamily="Montserrat Alternates Medium"
+                            FontSize="30"
+                            Foreground="#7D4A40" />
+                        <TextBox Style="{StaticResource TextboxTheme}" Text="{Binding Information.Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
                     <StackPanel>
-                        <Grid Margin="0,0,0,20">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <RadioButton
-                                Content="Male"
-                                FontFamily="Montserrat Alternates Medium"
-                                FontSize="30"
-                                Foreground="#7D4A40"
-                                IsChecked="{Binding Information.Gender, Converter={StaticResource GenderConverter}, ConverterParameter=Male}"
-                                Style="{StaticResource RadioButtonTheme}" />
-                            <RadioButton
-                                Grid.Column="1"
-                                Content="Female"
-                                FontFamily="Montserrat Alternates Medium"
-                                FontSize="30"
-                                Foreground="#7D4A40"
-                                IsChecked="{Binding Information.Gender, Converter={StaticResource GenderConverter}, ConverterParameter=Female}"
-                                Style="{StaticResource RadioButtonTheme}" />
-                        </Grid>
-                        <StackPanel Margin="0,0,0,10">
-                            <Label
-                                Content="Name"
-                                FontFamily="Montserrat Alternates Medium"
-                                FontSize="30"
-                                Foreground="#7D4A40" />
-                            <TextBox Style="{StaticResource TextboxTheme}" Text="{Binding Information.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        </StackPanel>
-                        <StackPanel Margin="0,0,0,10">
-                            <Label
-                                Content="Phone"
-                                FontFamily="Montserrat Alternates Medium"
-                                FontSize="30"
-                                Foreground="#7D4A40" />
-                            <TextBox Style="{StaticResource TextboxTheme}" Text="{Binding Information.Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        </StackPanel>
-                        <StackPanel>
-                            <Label
-                                Content="Address"
-                                FontFamily="Montserrat Alternates Medium"
-                                FontSize="30"
-                                Foreground="#7D4A40" />
-                            <ComboBox
-                                Height="100"
-                                FontSize="20"
-                                ItemsSource="{Binding Addresses}"
-                                SelectedItem="{Binding Information.Address, Mode=TwoWay}"
-                                Style="{StaticResource ComboBoxFlatStyle}" />
-                        </StackPanel>
+                        <Label
+                            Content="Address"
+                            FontFamily="Montserrat Alternates Medium"
+                            FontSize="30"
+                            Foreground="#7D4A40" />
+                        <ComboBox
+                            Height="100"
+                            FontSize="20"
+                            ItemsSource="{Binding Addresses}"
+                            SelectedItem="{Binding Information.Address, Mode=TwoWay}"
+                            Style="{StaticResource ComboBoxFlatStyle}" />
                     </StackPanel>
                 </StackPanel>
                 <Border
+                    x:Name="Information"
                     Grid.Row="2"
                     Width="300"
                     Margin="0,30,0,30"
@@ -188,7 +188,136 @@
                     CornerRadius="20"
                     Cursor="Hand">
                     <Border.InputBindings>
-                        <MouseBinding Command="{Binding ExecuteSaveChangesCommand}" MouseAction="LeftClick" />
+                        <MouseBinding
+                            Command="{Binding ExecuteSaveChangesCommand}"
+                            CommandParameter="{Binding Path=Name, ElementName=Information}"
+                            MouseAction="LeftClick" />
+                    </Border.InputBindings>
+                    <Border.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <Trigger Property="Border.IsMouseOver" Value="True">
+                                    <Setter Property="Border.Opacity" Value="0.8" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <Border.Effect>
+                        <DropShadowEffect
+                            BlurRadius="10"
+                            Direction="270"
+                            Opacity="0.4"
+                            ShadowDepth="1"
+                            Color="Black" />
+                    </Border.Effect>
+                    <Label
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="Save changes"
+                        FontFamily="Montserrat Alternates SemiBold"
+                        FontSize="29"
+                        Foreground="#FFEDDB" />
+                </Border>
+            </Grid>
+        </Border>
+
+        <Border
+            Grid.Column="1"
+            Margin="20,45,45,45"
+            Background="#FFEDDB"
+            CornerRadius="48"
+            Visibility="{Binding PassVisible}">
+            <Grid Margin="50,0,50,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100" />
+                    <RowDefinition Height="560" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Label
+                    VerticalAlignment="Center"
+                    Content="Change Password"
+                    FontFamily="Montserrat Alternates SemiBold"
+                    FontSize="40" />
+                <StackPanel Grid.Row="1">
+                    <StackPanel Margin="0,0,0,10">
+                        <Label
+                            Content="New Password"
+                            FontFamily="Montserrat Alternates Medium"
+                            FontSize="30"
+                            Foreground="#7D4A40" />
+                        <TextBox Style="{StaticResource TextboxTheme}" Text="{Binding NewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,10">
+                        <Label
+                            Content="Email"
+                            FontFamily="Montserrat Alternates Medium"
+                            FontSize="30"
+                            Foreground="#7D4A40" />
+                        <TextBox Style="{StaticResource TextboxTheme}" Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,10">
+                        <Label
+                            Content="Enter Code"
+                            FontFamily="Montserrat Alternates Medium"
+                            FontSize="30"
+                            Foreground="#7D4A40" />
+                        <Grid>
+                            <TextBox Style="{StaticResource TextboxTheme}" Text="{Binding AuthCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Border
+                                Width="66"
+                                Height="66"
+                                Margin="450,17,0,17"
+                                HorizontalAlignment="Left"
+                                Background="#CB6E59"
+                                CornerRadius="15"
+                                Cursor="Hand">
+                                <Border.Effect>
+                                    <DropShadowEffect
+                                        BlurRadius="10"
+                                        Direction="270"
+                                        Opacity="0.4"
+                                        ShadowDepth="1"
+                                        Color="Black" />
+                                </Border.Effect>
+                                <Border.Style>
+                                    <Style>
+                                        <Style.Triggers>
+                                            <Trigger Property="Border.IsMouseOver" Value="True">
+                                                <Setter Property="Border.Opacity" Value="0.8" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Border.InputBindings>
+                                    <MouseBinding Command="{Binding ExecuteSendCodeCommand}" MouseAction="LeftClick" />
+                                </Border.InputBindings>
+                                <Grid>
+                                    <Label
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Content="&#xf029;"
+                                        FontFamily="Font Awesome 6 Free Solid"
+                                        FontSize="36"
+                                        Foreground="#FFEAEA"
+                                        Visibility="Visible" />
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </StackPanel>
+                <Border
+                    x:Name="Password"
+                    Grid.Row="2"
+                    Width="300"
+                    Margin="0,30,0,30"
+                    Background="#B03A25"
+                    CornerRadius="20"
+                    Cursor="Hand">
+                    <Border.InputBindings>
+                        <MouseBinding
+                            Command="{Binding ExecuteSaveChangesCommand}"
+                            CommandParameter="{Binding Path=Name, ElementName=Password}"
+                            MouseAction="LeftClick" />
                     </Border.InputBindings>
                     <Border.Style>
                         <Style>
