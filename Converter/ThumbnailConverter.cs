@@ -14,11 +14,14 @@ namespace QuanAnNhat.Converter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            string appPath = AppDomain.CurrentDomain.BaseDirectory;
+            appPath = appPath.Substring(0, 29).Replace("\\", "/");
+
             if (value == null)
             {
-                return new BitmapImage(new Uri("pack://application:,,,/Assets/Images/dish1.jpg"));
+                return new BitmapImage(new Uri($"{appPath}/Assets/Images/dish1.jpg"));
             }
-            string thumbnailPath = $"pack://application:,,,/Assets/Images/Dishes/{(int)value}.jpg";
+            string thumbnailPath = $"{appPath}/Assets/Images/Dishes/{(int)value}.jpg";
 
             return new BitmapImage(new Uri(thumbnailPath, UriKind.Absolute));
         }

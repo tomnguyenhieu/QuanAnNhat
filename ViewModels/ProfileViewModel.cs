@@ -2,16 +2,17 @@
 using CommunityToolkit.Mvvm.Input;
 using MailKit.Net.Smtp;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 using MimeKit;
 using QuanAnNhat.DBContext;
 using QuanAnNhat.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using Windows.System;
 
 namespace QuanAnNhat.ViewModels
 {
@@ -20,6 +21,8 @@ namespace QuanAnNhat.ViewModels
         public int _UserId { get; set; }
         public List<string> Addresses { get; set; }
 
+        [ObservableProperty]
+        private User _User;
         [ObservableProperty]
         private Visibility _InfoVisible;
         [ObservableProperty]
@@ -59,6 +62,7 @@ namespace QuanAnNhat.ViewModels
                     Phone = user.Information.Phone,
                     Address = user.Information.Address,
                 };
+                User = user;
             }
             
         }
@@ -124,7 +128,7 @@ namespace QuanAnNhat.ViewModels
             }
         }
 
-        public async void SendGenerateCode()
+        public void SendGenerateCode()
         {
             if (!Email.Contains("@") || Email.Contains(" ") || Email is null)
             {
@@ -152,6 +156,42 @@ namespace QuanAnNhat.ViewModels
                 }
                 MessageBox.Show("Vui lòng kiểm tra Gmail!");
             }
+        }
+
+        public void HandleUploadImage()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                Filter = "Image files|*.png;*.jpg",
+                FilterIndex = 1,
+            };
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string sourcePath = openFileDialog.FileName;
+                string fileName = $"{DateTime.Now.Ticks}_{openFileDialog.SafeFileName}";
+                string appPath = AppDomain.CurrentDomain.BaseDirectory.Substring(0, 29).Replace("\\", "/");
+                string destinationPath = $"{appPath}/Assets/Images/Avatar/{User.Email}";
+
+                Directory.CreateDirectory(destinationPath);
+                File.Copy(sourcePath, $"{destinationPath}/{fileName}");
+
+                using (var context = new QuanannhatContext())
+                {
+                    context.Users.Where(u => u.Id == _UserId).ExecuteUpdate(u => u.SetProperty(u => u.Avatar, fileName));
+                    context.SaveChanges();
+                    User = context.Users.Find(_UserId);
+                }
+                MessageBox.Show("Cập nhật avatar thành công!");
+            } else
+            {
+                MessageBox.Show("Cập nhật avatar thất bại!");
+            }
+        }
+
+        [RelayCommand]
+        public void ExecuteUploadAvatar()
+        {
+            HandleUploadImage();
         }
 
         [RelayCommand]
@@ -184,7 +224,7 @@ namespace QuanAnNhat.ViewModels
         }
 
         [RelayCommand]
-        public async Task ExecuteSendCode()
+        public void ExecuteSendCode()
         {
             Random random = new Random();
             GenerateCode = $"{random.Next(9)}{random.Next(9)}{random.Next(9)}{random.Next(9)}";

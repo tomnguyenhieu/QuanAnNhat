@@ -42,6 +42,7 @@
             <converter:ThumbnailConverter x:Key="ThumbnailConverter" />
             <converter:FormDescConverter x:Key="FormDescConverter" />
             <converter:GenderConverter x:Key="GenderConverter" />
+            <converter:AvatarConverter x:Key="AvatarConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

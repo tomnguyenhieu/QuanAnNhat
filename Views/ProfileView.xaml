@@ -30,7 +30,7 @@
                             Height="210"
                             CornerRadius="1000">
                             <Border.Background>
-                                <ImageBrush ImageSource="/Assets/Images/Avatar/3ce034e2a378aef1413833e9748f654b.jpg" Stretch="UniformToFill" />
+                                <ImageBrush ImageSource="{Binding User, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource AvatarConverter}}" Stretch="UniformToFill" />
                             </Border.Background>
                         </Border>
                         <Border
@@ -38,7 +38,28 @@
                             Height="50"
                             Margin="312,144,173,16"
                             Background="#A15E50"
-                            CornerRadius="100">
+                            CornerRadius="100"
+                            Cursor="Hand">
+                            <Border.Effect>
+                                <DropShadowEffect
+                                    BlurRadius="10"
+                                    Direction="270"
+                                    Opacity="0.4"
+                                    ShadowDepth="1"
+                                    Color="Black" />
+                            </Border.Effect>
+                            <Border.Style>
+                                <Style>
+                                    <Style.Triggers>
+                                        <Trigger Property="Border.IsMouseOver" Value="True">
+                                            <Setter Property="Border.Opacity" Value="0.8" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Border.InputBindings>
+                                <MouseBinding Command="{Binding ExecuteUploadAvatarCommand}" MouseAction="LeftClick" />
+                            </Border.InputBindings>
                             <Label
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
