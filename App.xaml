@@ -23,6 +23,7 @@
                 <ResourceDictionary Source="/Theme/Window/TextboxTheme.xaml" />
                 <ResourceDictionary Source="/Theme/Profile/ProfileTheme.xaml" />
                 <ResourceDictionary Source="/Theme/Window/RadioButtonTheme.xaml" />
+                <ResourceDictionary Source="/Theme/Profile/StarTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">

@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace QuanAnNhat.ViewModels
 {
@@ -38,12 +39,29 @@ namespace QuanAnNhat.ViewModels
         [ObservableProperty]
         private string? _AuthCode;
         private string? GenerateCode;
+        private SolidColorBrush BaseStarColor;
+        [ObservableProperty]
+        private SolidColorBrush _Star1;
+        [ObservableProperty]
+        private SolidColorBrush _Star2;
+        [ObservableProperty]
+        private SolidColorBrush _Star3;
+        [ObservableProperty]
+        private SolidColorBrush _Star4;
+        [ObservableProperty]
+        private SolidColorBrush _Star5;
+        private int StarRate;
+        [ObservableProperty]
+        private string? _FeedBack;
+
 
         public ProfileViewModel(string? userId)
         {
             _UserId = Convert.ToInt32(userId);
             InitAddresses();
             InitInformation();
+            InitStarColor(0);
+            StarRate = 0;
 
             InfoVisible = Visibility.Visible;
             PassVisible = Visibility.Hidden;
@@ -86,6 +104,51 @@ namespace QuanAnNhat.ViewModels
             Addresses.AddRange(provinces);
         }
 
+        public void InitStarColor(int starIndex)
+        {
+            BaseStarColor = new SolidColorBrush(Color.FromRgb(251, 168, 27));
+            Star1 = BaseStarColor.Clone();
+            Star2 = BaseStarColor.Clone();
+            Star3 = BaseStarColor.Clone();
+            Star4 = BaseStarColor.Clone();
+            Star5 = BaseStarColor.Clone();
+            switch (starIndex)
+            {
+                case 0:
+                    Star1.Opacity = 0.3;
+                    Star2.Opacity = 0.3;
+                    Star3.Opacity = 0.3;
+                    Star4.Opacity = 0.3;
+                    Star5.Opacity = 0.3;
+                    break;
+                case 1:
+                    StarRate = 1;
+                    Star2.Opacity = 0.3;
+                    Star3.Opacity = 0.3;
+                    Star4.Opacity = 0.3;
+                    Star5.Opacity = 0.3;
+                    break;
+                case 2:
+                    StarRate = 2;
+                    Star3.Opacity = 0.3;
+                    Star4.Opacity = 0.3;
+                    Star5.Opacity = 0.3;
+                    break;
+                case 3:
+                    StarRate = 3;
+                    Star4.Opacity = 0.3;
+                    Star5.Opacity = 0.3;
+                    break;
+                case 4:
+                    StarRate = 4;
+                    Star5.Opacity = 0.3;
+                    break;
+                case 5:
+                    StarRate = 5;
+                    break;
+            }
+        }
+
         public void HandleSaveChange(string tab)
         {
             switch (tab)
@@ -119,6 +182,30 @@ namespace QuanAnNhat.ViewModels
                             context.SaveChanges();
                         }
                         MessageBox.Show("Cập nhật mật khẩu mới thành công!");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Vui lòng kiểm tra lại!");
+                    }
+                    break;
+                case "Feedback":
+                    if (!string.IsNullOrWhiteSpace(FeedBack) && StarRate != 0)
+                    {
+                        using (var context = new QuanannhatContext())
+                        {
+                            int count = context.Rates.ToList().Count() + 1;
+                            Rate rate = new Rate()
+                            {
+                                Id = count,
+                                UserId = _UserId,
+                                Comment = FeedBack,
+                                Type = StarRate,
+                                Time = DateOnly.FromDateTime(DateTime.Now)
+                            };
+                            context.Rates.Add(rate);
+                            context.SaveChanges();
+                            MessageBox.Show("Cảm ơn bạn đã đánh giá!");
+                        }
                     }
                     else
                     {
@@ -232,6 +319,13 @@ namespace QuanAnNhat.ViewModels
             Console.WriteLine(GenerateCode);
 
             SendGenerateCode();
+        }
+
+        [RelayCommand]
+        public void ExecuteInitStarColor(object parameter)
+        {
+            int starIndex = Convert.ToInt32(parameter.ToString().Substring(4));
+            InitStarColor(starIndex);
         }
     }
 }

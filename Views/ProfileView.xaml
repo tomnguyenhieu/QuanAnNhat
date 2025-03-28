@@ -121,7 +121,7 @@
             Background="#FFEDDB"
             CornerRadius="48"
             Visibility="{Binding InfoVisible}">
-            <Grid Margin="50,0,50,0">
+            <Grid Margin="30,0,30,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="100" />
                     <RowDefinition Height="560" />
@@ -132,7 +132,7 @@
                         VerticalAlignment="Center"
                         Content="Personal Information"
                         FontFamily="Montserrat Alternates SemiBold"
-                        FontSize="40" />
+                        FontSize="36" />
                     <Border
                         Width="50"
                         Height="50"
@@ -248,7 +248,7 @@
             Background="#FFEDDB"
             CornerRadius="48"
             Visibility="{Binding PassVisible}">
-            <Grid Margin="50,0,50,0">
+            <Grid Margin="30,0,30,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="100" />
                     <RowDefinition Height="560" />
@@ -258,7 +258,7 @@
                     VerticalAlignment="Center"
                     Content="Change Password"
                     FontFamily="Montserrat Alternates SemiBold"
-                    FontSize="40" />
+                    FontSize="36" />
                 <StackPanel Grid.Row="1">
                     <StackPanel Margin="0,0,0,10">
                         <Label
@@ -367,5 +367,149 @@
                 </Border>
             </Grid>
         </Border>
+
+        <Border
+            Grid.Column="1"
+            Margin="20,45,45,45"
+            Background="#FFEDDB"
+            CornerRadius="48"
+            Visibility="{Binding FeedbackVisible}">
+            <Grid Margin="30,0,30,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100" />
+                    <RowDefinition Height="560" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Label
+                    VerticalAlignment="Center"
+                    Content="How was your experience?"
+                    FontFamily="Montserrat Alternates SemiBold"
+                    FontSize="36" />
+                <StackPanel Grid.Row="1">
+                    <StackPanel Margin="0,0,0,10">
+                        <Label
+                            Content="Rate out app!"
+                            FontFamily="Montserrat Alternates Medium"
+                            FontSize="30"
+                            Foreground="#7D4A40" />
+                        <Grid Height="100">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <ToggleButton
+                                x:Name="star1"
+                                Command="{Binding ExecuteInitStarColorCommand}"
+                                CommandParameter="{Binding Path=Name, ElementName=star1}"
+                                Foreground="{Binding Star1}"
+                                Style="{StaticResource StarTheme}" />
+                            <ToggleButton
+                                x:Name="star2"
+                                Grid.Column="1"
+                                Command="{Binding ExecuteInitStarColorCommand}"
+                                CommandParameter="{Binding Path=Name, ElementName=star2}"
+                                Foreground="{Binding Star2}"
+                                Style="{StaticResource StarTheme}" />
+                            <ToggleButton
+                                x:Name="star3"
+                                Grid.Column="2"
+                                Command="{Binding ExecuteInitStarColorCommand}"
+                                CommandParameter="{Binding Path=Name, ElementName=star3}"
+                                Foreground="{Binding Star3}"
+                                Style="{StaticResource StarTheme}" />
+                            <ToggleButton
+                                x:Name="star4"
+                                Grid.Column="3"
+                                Command="{Binding ExecuteInitStarColorCommand}"
+                                CommandParameter="{Binding Path=Name, ElementName=star4}"
+                                Foreground="{Binding Star4}"
+                                Style="{StaticResource StarTheme}" />
+                            <ToggleButton
+                                x:Name="star5"
+                                Grid.Column="4"
+                                Command="{Binding ExecuteInitStarColorCommand}"
+                                CommandParameter="{Binding Path=Name, ElementName=star5}"
+                                Foreground="{Binding Star5}"
+                                Style="{StaticResource StarTheme}" />
+                        </Grid>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label
+                            Content="Tell us more about your experience"
+                            FontFamily="Montserrat Alternates Medium"
+                            FontSize="30"
+                            Foreground="#7D4A40" />
+                        <Border
+                            Height="350"
+                            Margin="0,5,0,0"
+                            Background="#f5d6c2"
+                            CornerRadius="30">
+                            <Border.Effect>
+                                <DropShadowEffect
+                                    BlurRadius="10"
+                                    Direction="270"
+                                    Opacity="0.4"
+                                    ShadowDepth="1"
+                                    Color="Black" />
+                            </Border.Effect>
+                            <TextBox
+                                Margin="20"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                FontFamily="Montserrat Alternates"
+                                FontSize="26"
+                                FontWeight="Regular"
+                                Foreground="#42150D"
+                                Text="{Binding FeedBack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                TextWrapping="Wrap" />
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+                <Border
+                    x:Name="Feedback"
+                    Grid.Row="2"
+                    Width="300"
+                    Margin="0,30,0,30"
+                    HorizontalAlignment="Right"
+                    Background="#B03A25"
+                    CornerRadius="20"
+                    Cursor="Hand">
+                    <Border.InputBindings>
+                        <MouseBinding
+                            Command="{Binding ExecuteSaveChangesCommand}"
+                            CommandParameter="{Binding Path=Name, ElementName=Feedback}"
+                            MouseAction="LeftClick" />
+                    </Border.InputBindings>
+                    <Border.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <Trigger Property="Border.IsMouseOver" Value="True">
+                                    <Setter Property="Border.Opacity" Value="0.8" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <Border.Effect>
+                        <DropShadowEffect
+                            BlurRadius="10"
+                            Direction="270"
+                            Opacity="0.4"
+                            ShadowDepth="1"
+                            Color="Black" />
+                    </Border.Effect>
+                    <Label
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="Send"
+                        FontFamily="Montserrat Alternates SemiBold"
+                        FontSize="29"
+                        Foreground="#FFEDDB" />
+                </Border>
+            </Grid>
+        </Border>
+
     </Grid>
 </UserControl>
