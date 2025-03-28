@@ -263,7 +263,6 @@ namespace QuanAnNhat.ViewModels
 
         public void CreateOrderBill()
         {
-            DateTime dateTime = DateTime.Now;
             using (var context = new QuanannhatContext())
             {
                 int _orderId = context.OrderBills.Count() + 1;
