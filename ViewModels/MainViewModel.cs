@@ -163,7 +163,8 @@ namespace QuanAnNhat.ViewModels
                 var info = new Information()
                 {
                     Id = context.Informations.ToList().Count + 1,
-                    Name = $"Customer {context.Informations.ToList().Count + 1}"
+                    Name = $"Customer {context.Informations.ToList().Count + 1}",
+                    Birth = DateOnly.FromDateTime(DateTime.Now)
                 };
                 context.Informations.Add(info);
                 var user = new User()

@@ -287,7 +287,7 @@
                             <Border
                                 Width="66"
                                 Height="66"
-                                Margin="450,17,0,17"
+                                Margin="490,17,0,17"
                                 HorizontalAlignment="Left"
                                 Background="#CB6E59"
                                 CornerRadius="15"
