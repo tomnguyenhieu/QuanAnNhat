@@ -205,6 +205,10 @@ namespace QuanAnNhat.ViewModels
                             context.Rates.Add(rate);
                             context.SaveChanges();
                             MessageBox.Show("Cảm ơn bạn đã đánh giá!");
+
+                            FeedBack = null;
+                            StarRate = 0;
+                            InitStarColor(0);
                         }
                     }
                     else
